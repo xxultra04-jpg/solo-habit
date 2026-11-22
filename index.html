@@ -664,6 +664,413 @@ window.onload = () => {
     
     updateUI();
 };
+// ====================== ОТРИСОВКА КВЕСТОВ ======================
+function renderQuests() {
+    const activeContainer = document.getElementById('activeQuestSection');
+    const allContainer = document.getElementById('allQuestsList');
+    
+    const activeQuests = state.quests.filter(q => q.isActive && !q.completed && !q.failed);
+    const otherQuests = state.quests.filter(q => !q.isActive || q.completed || q.failed);
+
+    // Рендер активного квеста
+    if (activeQuests.length === 0) {
+        activeContainer.innerHTML = `<div class="empty-state">Нет активного квеста</div>`;
+    } else {
+        activeContainer.innerHTML = '';
+        activeQuests.forEach(q => {
+            const div = document.createElement('div');
+            div.className = 'active-quest';
+            
+            const doneCount = q.subpoints.filter(s => s.done).length;
+            const total = q.subpoints.length;
+            const percent = total > 0 ? (doneCount / total) * 100 : 0;
+
+            div.innerHTML = `
+                <div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${q.rank} rank-font">${q.rank}</span> RANK</div>
+                <div class="aq-title">${q.name}</div>
+                <div class="aq-progress">Выполнено: ${doneCount} из ${total} (${Math.round(percent)}%)</div>
+                <div class="subprogress-bar"><div class="subprogress-fill" style="width:${percent}%"></div></div>
+                <ul class="subpoints">
+                    ${q.subpoints.map((sp, idx) => `
+                        <li>
+                            <input type="checkbox" id="sp-${q.id}-${idx}" ${sp.done ? 'checked' : ''} onchange="toggleSubpoint('${q.id}', ${idx})">
+                            <label for="sp-${q.id}-${idx}">${sp.text}</label>
+                        </li>
+                    `).join('')}
+                </ul>
+                <div class="quest-actions">
+                    <button class="btn btn-primary" onclick="completeQuest('${q.id}')">Завершить квест</button>
+                </div>
+            `;
+            activeContainer.appendChild(div);
+        });
+    }
+
+    // Рендер остальных квестов
+    if (otherQuests.length === 0) {
+        allContainer.innerHTML = `<div class="empty-state">Пока нет других квестов</div>`;
+    } else {
+        allContainer.innerHTML = '';
+        otherQuests.forEach(q => {
+            const div = document.createElement('div');
+            div.className = 'quest-item';
+            if (q.completed || q.failed) div.style.opacity = '0.5';
+            
+            let statusText = '';
+            if (q.completed) statusText = ' (Выполнен)';
+            if (q.failed) statusText = ' (Провален)';
+            
+            let actionBtn = '';
+            if (!q.completed && !q.failed) {
+                actionBtn = `<button class="btn btn-secondary btn-small" onclick="setActiveQuest('${q.id}')">Сделать активным</button>`;
+            }
+
+            div.innerHTML = `
+                <div class="quest-header">
+                    <div class="quest-name">${q.name}${statusText}</div>
+                    <span class="quest-rank-badge rank-${q.rank} rank-font">${q.rank}</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+                    <div style="font-size:.75rem;color:var(--text-dim)">Подпунктов: ${q.subpoints.length}</div>
+                    ${actionBtn}
+                </div>
+            `;
+            allContainer.appendChild(div);
+        });
+    }
+}
+
+function setActiveQuest(id) {
+    state.quests.forEach(q => {
+        if (!q.completed && !q.failed) q.isActive = (q.id === id);
+    });
+    saveState();
+    updateUI();
+}
+
+function toggleSubpoint(questId, spIndex) {
+    const quest = state.quests.find(q => q.id === questId);
+    if (!quest) return;
+    quest.subpoints[spIndex].done = !quest.subpoints[spIndex].done;
+    saveState();
+    updateUI();
+}
+
+function completeQuest(id) {
+    const quest = state.quests.find(q => q.id === id);
+    if (!quest) return;
+
+    const doneCount = quest.subpoints.filter(s => s.done).length;
+    const total = quest.subpoints.length;
+    const percent = total > 0 ? (doneCount / total) * 100 : 0;
+
+    if (percent >= 85) {
+        // УСПЕХ
+        let baseReward = RANK_REWARDS[quest.rank] || RANK_REWARDS['E'];
+        let xpGain = baseReward.xp;
+        let coinGain = baseReward.coins;
+
+        // Буст x2
+        if (state.boostUntil > Date.now()) {
+            xpGain *= 2;
+            coinGain *= 2;
+        }
+
+        state.xp += xpGain;
+        state.coins += coinGain;
+        state.totalQuestsCompleted++;
+        state.totalXPEarned += xpGain;
+        state.totalCoinsEarned += coinGain;
+
+        // Логирование активности
+        const today = getTodayStr();
+        state.activityLog[today] = (state.activityLog[today] || 0) + 1;
+
+        // Серия дней
+        if (state.lastActiveDate !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+            
+            if (state.lastActiveDate === yStr) state.streak++;
+            else state.streak = 1;
+            
+            if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+            state.lastActiveDate = today;
+        }
+
+        // Помечаем квест выполненным
+        quest.completed = true;
+        quest.isActive = false;
+        
+        // Ищем следующий невыполненный квест
+        const nextQuest = state.quests.find(q => !q.completed && !q.failed);
+        if (nextQuest) nextQuest.isActive = true;
+
+        saveState();
+        updateUI();
+        
+        // Показываем экран награды
+        showRewardScreen(quest.rank, xpGain, coinGain);
+        
+    } else {
+        // ПРОВАЛ
+        let xpLoss = PENALTY_XP;
+        state.xp = Math.max(0, state.xp - xpLoss); // не ниже 0
+        quest.failed = true;
+        quest.isActive = false;
+        
+        // Сбрасываем серию
+        state.streak = 0;
+
+        // Ищем следующий невыполненный
+        const nextQuest = state.quests.find(q => !q.completed && !q.failed);
+        if (nextQuest) nextQuest.isActive = true;
+
+        saveState();
+        updateUI();
+        
+        // Показываем экран провала
+        showFailScreen(xpLoss);
+    }
+}
+
+// ====================== ЭКРАНЫ НАГРАДЫ И ПРОВАЛА ======================
+function showRewardScreen(rank, xp, coins) {
+    const title = document.getElementById('rewardTitle');
+    title.textContent = `КВЕСТ ${rank} RANK ВЫПОЛНЕН`;
+    title.className = `reward-title rank-font rank-${rank}`;
+    
+    document.getElementById('rewardStats').textContent = `+${xp} XP · +${coins} 🪙`;
+    document.getElementById('rewardScreen').classList.add('show');
+    
+    // Звук и вибрация
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+}
+
+function showFailScreen(xpLoss) {
+    document.getElementById('failStats').textContent = `−${xpLoss} XP · Прогресс сброшен`;
+    document.getElementById('failScreen').classList.add('show');
+    if (navigator.vibrate) navigator.vibrate(300);
+}
+
+function closeOverlay(id) {
+    document.getElementById(id).classList.remove('show');
+    switchTab('home');
+}
+
+// ====================== МАГАЗИН ======================
+function renderShop() {
+    // Темы
+    const themesGrid = document.getElementById('themesGrid');
+    themesGrid.innerHTML = Object.keys(THEMES).map(key => {
+        const t = THEMES[key];
+        const isOwned = (state.currentTheme === key);
+        return `
+            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTheme('${key}')">
+                <div class="si-icon">🎨</div>
+                <div class="si-name">${t.name}</div>
+                <div class="si-price">${isOwned ? 'Активна' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div>
+            </div>
+        `;
+    }).join('');
+
+    // Аватары
+    const avatarsGrid = document.getElementById('avatarsGrid');
+    avatarsGrid.innerHTML = Object.keys(AVATARS).map(key => {
+        const a = AVATARS[key];
+        const isOwned = (state.avatar === key);
+        return `
+            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyAvatar('${key}')">
+                <div class="si-icon">${a.icon}</div>
+                <div class="si-price">${isOwned ? 'Выбран' : (a.price === 0 ? 'Бесплатно' : a.price + ' 🪙')}</div>
+            </div>
+        `;
+    }).join('');
+
+    // Титулы
+    const titlesGrid = document.getElementById('titlesGrid');
+    titlesGrid.innerHTML = Object.keys(TITLES).map(key => {
+        const t = TITLES[key];
+        const isOwned = (state.title === key);
+        return `
+            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTitle('${key}')">
+                <div class="si-icon">📜</div>
+                <div class="si-name" style="font-size:.75rem">${t.name}</div>
+                <div class="si-price">${isOwned ? 'Выбран' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div>
+            </div>
+        `;
+    }).join('');
+
+    // Бусты
+    const boostsGrid = document.getElementById('boostsGrid');
+    const boostActive = state.boostUntil > Date.now();
+    boostsGrid.innerHTML = `
+        <div class="shop-item" onclick="buyBoost()">
+            <div class="si-icon">⚡</div>
+            <div class="si-name">x2 XP на 1 час</div>
+            <div class="si-price">${boostActive ? 'Активен' : '40 🪙'}</div>
+        </div>
+    `;
+}
+
+function buyTheme(key) {
+    const t = THEMES[key];
+    if (state.currentTheme === key) return;
+    if (state.coins < t.price) return showToast('Недостаточно монет!', true);
+    
+    state.coins -= t.price;
+    state.currentTheme = key;
+    saveState();
+    updateUI();
+    showToast('Тема изменена!');
+}
+
+function buyAvatar(key) {
+    const a = AVATARS[key];
+    if (state.avatar === key) return;
+    if (state.coins < a.price) return showToast('Недостаточно монет!', true);
+    
+    state.coins -= a.price;
+    state.avatar = key;
+    saveState();
+    updateUI();
+    showToast('Аватар куплен!');
+}
+
+function buyTitle(key) {
+    const t = TITLES[key];
+    if (state.title === key) return;
+    if (state.coins < t.price) return showToast('Недостаточно монет!', true);
+    
+    state.coins -= t.price;
+    state.title = key;
+    saveState();
+    updateUI();
+    showToast('Титул куплен!');
+}
+
+function buyBoost() {
+    if (state.boostUntil > Date.now()) return showToast('Буст уже активен', true);
+    if (state.coins < 40) return showToast('Недостаточно монет!', true);
+    
+    state.coins -= 40;
+    state.boostUntil = Date.now() + (60 * 60 * 1000); // 1 час
+    saveState();
+    updateUI();
+    showToast('Буст x2 XP активирован на 1 час!');
+}
+
+// ====================== СТАТИСТИКА ======================
+function updateStatsUI() {
+    document.getElementById('statTotalQuests').textContent = state.totalQuestsCompleted;
+    document.getElementById('statTotalXP').textContent = state.totalXPEarned;
+    document.getElementById('statTotalCoins').textContent = state.totalCoinsEarned;
+    document.getElementById('statStreak').textContent = state.bestStreak;
+
+    const chartBars = document.getElementById('chartBars');
+    chartBars.innerHTML = '';
+    
+    const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const now = new Date();
+    
+    let maxVal = 1;
+    let last7Days = [];
+
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - i);
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const val = state.activityLog[dateStr] || 0;
+        if (val > maxVal) maxVal = val;
+        last7Days.push({ day: days[d.getDay()], val: val });
+    }
+
+    last7Days.forEach(d => {
+        const heightPercent = (d.val / maxVal) * 100;
+        const barWrap = document.createElement('div');
+        barWrap.className = 'chart-bar-wrap';
+        barWrap.innerHTML = `
+            <div class="chart-val">${d.val > 0 ? d.val : ''}</div>
+            <div class="chart-bar" style="height:${heightPercent}%"></div>
+            <div class="chart-day">${d.day}</div>
+        `;
+        chartBars.appendChild(barWrap);
+    });
+}
+
+// ====================== НАСТРОЙКИ И GROQ ======================
+function saveGroqKey() {
+    const val = document.getElementById('groqKeyInput').value.trim();
+    if (!val) return showToast('Введите ключ', true);
+    state.groqKey = val;
+    saveState();
+    document.getElementById('groqStatus').textContent = 'ключ задан ✓';
+    document.getElementById('groqStatus').style.color = 'var(--success)';
+    showToast('Ключ сохранен!');
+}
+
+function clearGroqKey() {
+    state.groqKey = '';
+    saveState();
+    document.getElementById('groqKeyInput').value = '';
+    document.getElementById('groqStatus').textContent = 'не задан';
+    document.getElementById('groqStatus').style.color = 'var(--text-dim)';
+    showToast('Ключ удален');
+}
+
+// Переключение темы (тёмная/светлая)
+document.getElementById('darkModeToggle').addEventListener('change', (e) => {
+    if (e.target.checked) document.body.classList.remove('light');
+    else document.body.classList.add('light');
+});
+
+// Экспорт / Импорт
+function exportData() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "solo_habit_backup.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (imported.quests && imported.xp !== undefined) {
+                state = { ...state, ...imported };
+                saveState();
+                updateUI();
+                showToast('Прогресс успешно импортирован!');
+            } else {
+                showToast('Неверный файл', true);
+            }
+        } catch (err) {
+            showToast('Ошибка чтения файла', true);
+        }
+    };
+    reader.readAsText(file);
+}
+
+// Проверка ежедневного сброса
+function checkDailyReset() {
+    const today = getTodayStr();
+    state.quests.forEach(q => {
+        if (q.isDaily && q.completed && q.lastCompletedDate !== today) {
+            q.completed = false;
+            q.subpoints.forEach(sp => sp.done = false);
+            q.lastCompletedDate = today;
+        }
+    });
+}
+
+// Устанавливаем сегодняшнюю дату для новых ежедневных квестов (заглушка)
 </script>
 </body>
 </html>
