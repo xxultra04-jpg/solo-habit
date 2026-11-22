@@ -336,7 +336,334 @@ body.light{background:#d8d8e8}
 
 <!-- ===== JAVASCRIPT (часть 1) ===== -->
 <script>
-/* СЮДА БУДЕТ ВСТАВЛЕН JS ЧАСТЬ 1 (следующее сообщение) */
+// ====================== КОНСТАНТЫ И ДАННЫЕ ======================
+const XP_PER_LEVEL = 100;
+const XP_REWARD_DEFAULT = 10;
+const COIN_REWARD_DEFAULT = 5;
+const PENALTY_XP = 5;
+
+// 🔑 ВСТАВЬТЕ СВОЙ GROQ API КЛЮЧ ЗДЕСЬ (если хотите, чтобы работало сразу у вас)
+// Получить бесплатно: https://console.groq.com/keys
+// Внимание: если ключ вписан сюда, он будет виден в исходном коде страницы!
+const GROQ_API_KEY = ""; 
+
+const RANKS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
+const RANK_REWARDS = {
+    'E':   { xp: 5,  coins: 2 },
+    'D':   { xp: 10, coins: 5 },
+    'C':   { xp: 15, coins: 8 },
+    'B':   { xp: 25, coins: 12 },
+    'A':   { xp: 40, coins: 20 },
+    'S':   { xp: 60, coins: 30 },
+    'SS':  { xp: 90, coins: 50 },
+    'SSS': { xp: 150, coins: 100 }
+};
+
+const THEMES = {
+    neon: { name: 'Неон', price: 0, class: 'theme-neon' },
+    dark: { name: 'Тьма', price: 30, class: 'theme-dark' },
+    gold: { name: 'Золото', price: 50, class: 'theme-gold' }
+};
+
+const AVATARS = {
+    default: { icon: '👤', price: 0 },
+    hunter: { icon: '🗡️', price: 20 },
+    shadow: { icon: '🌑', price: 30 },
+    monarch: { icon: '👑', price: 50 },
+    dragon: { icon: '🐉', price: 40 }
+};
+
+const TITLES = {
+    none: { name: 'Новичок', price: 0 },
+    hunter: { name: 'Охотник', price: 50 },
+    monarch: { name: 'Монарх тени', price: 100 },
+    god: { name: 'Бог разрушения', price: 200 }
+};
+
+// ====================== СОСТОЯНИЕ ======================
+let state = {
+    xp: 0,
+    coins: 0,
+    quests: [],
+    currentTheme: 'neon',
+    avatar: 'default',
+    title: 'none',
+    boostUntil: 0,
+    totalQuestsCompleted: 0,
+    totalXPEarned: 0,
+    totalCoinsEarned: 0,
+    bestStreak: 0,
+    lastActiveDate: null,
+    streak: 0,
+    activityLog: {}, // { "YYYY-MM-DD": count }
+    groqKey: ""
+};
+
+// Переменная для конструктора квеста
+let builderSubpoints = [];
+
+// ====================== LOCALSTORAGE ======================
+const STORAGE_KEY = 'soloHabitTracker_v1';
+
+function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try { state = { ...state, ...JSON.parse(saved) }; } catch(e) {}
+    }
+    // Проверка ежедневных квестов при загрузке
+    checkDailyReset();
+}
+
+// ====================== УТИЛИТЫ ======================
+function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = 'toast show' + (isError ? ' error' : '');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function getTodayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
+    if(tabName === 'stats') updateStatsUI();
+}
+
+// ====================== ЛОГИКА УРОВНЕЙ И РАНГОВ ======================
+function getCurrentLevel() { return Math.floor(state.xp / XP_PER_LEVEL) + 1; }
+function getRank() {
+    const level = getCurrentLevel();
+    if (level >= 40) return 'SSS';
+    if (level >= 30) return 'SS';
+    if (level >= 20) return 'S';
+    if (level >= 15) return 'A';
+    if (level >= 10) return 'B';
+    if (level >= 5)  return 'C';
+    if (level >= 2)  return 'D';
+    return 'E';
+}
+
+// ====================== UI ГЛАВНОГО ЭКРАНА ======================
+function updateMainUI() {
+    const level = getCurrentLevel();
+    const rank = getRank();
+    const xpInLevel = state.xp % XP_PER_LEVEL;
+    const xpPercent = (xpInLevel / XP_PER_LEVEL) * 100;
+
+    // Уровень и XP
+    document.getElementById('levelDisplay').textContent = level;
+    document.getElementById('xpBarFill').style.width = `${xpPercent}%`;
+    document.getElementById('xpText').textContent = `${xpInLevel} / ${XP_PER_LEVEL} XP`;
+    document.getElementById('xpTotalText').textContent = `${state.xp} XP`;
+    
+    // Монеты
+    document.getElementById('topCoins').textContent = state.coins;
+
+    // Профиль
+    const avatarData = AVATARS[state.avatar] || AVATARS.default;
+    document.getElementById('avatarDisplay').textContent = avatarData.icon;
+    
+    const titleData = TITLES[state.title] || TITLES.none;
+    document.getElementById('profileTitle').textContent = titleData.name;
+
+    const rankBadge = document.getElementById('rankBadge');
+    rankBadge.textContent = rank;
+    rankBadge.className = `rank-badge rank-${rank}`;
+
+    // Активный квест на главной
+    renderActiveQuestHome();
+}
+
+function renderActiveQuestHome() {
+    const container = document.getElementById('homeActiveQuest');
+    const active = state.quests.find(q => q.isActive && !q.completed && !q.failed);
+    
+    if (!active) {
+        container.innerHTML = `<div class="empty-state">Нет активного квеста. Создай его во вкладке «Квесты».</div>`;
+        return;
+    }
+
+    const doneCount = active.subpoints.filter(s => s.done).length;
+    const total = active.subpoints.length;
+    
+    container.innerHTML = `
+        <div class="active-quest">
+            <div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${active.rank} rank-font">${active.rank}</span> RANK</div>
+            <div class="aq-title">${active.name}</div>
+            <div class="aq-progress">Выполнено: ${doneCount} / ${total}</div>
+        </div>
+    `;
+}
+
+// ====================== КОНСТРУКТОР КВЕСТОВ ======================
+function addSubpointToBuilder() {
+    const input = document.getElementById('subpointInput');
+    const val = input.value.trim();
+    if (!val) return;
+    
+    builderSubpoints.push(val);
+    input.value = '';
+    renderBuilderSubpoints();
+}
+
+function renderBuilderSubpoints() {
+    const ul = document.getElementById('builderSubpoints');
+    ul.innerHTML = '';
+    builderSubpoints.forEach((sp, idx) => {
+        const li = document.createElement('li');
+        li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:4px;font-size:.85rem';
+        li.innerHTML = `<span>• ${sp}</span> <span style="color:var(--danger);cursor:pointer;font-weight:bold" onclick="removeBuilderSubpoint(${idx})">✕</span>`;
+        ul.appendChild(li);
+    });
+}
+
+function removeBuilderSubpoint(idx) {
+    builderSubpoints.splice(idx, 1);
+    renderBuilderSubpoints();
+}
+
+async function createQuest() {
+    const name = document.getElementById('questNameInput').value.trim();
+    if (!name) return showToast('Введите название квеста', true);
+    if (builderSubpoints.length === 0) return showToast('Добавьте хотя бы один подпункт', true);
+
+    showToast('Система оценивает квест...');
+
+    // Оценка ранга
+    let rank = 'E';
+    if (state.groqKey || GROQ_API_KEY) {
+        rank = await evaluateQuestWithGroq(name, builderSubpoints);
+    } else {
+        rank = evaluateQuestLocal(name, builderSubpoints);
+    }
+
+    const newQuest = {
+        id: Date.now().toString(),
+        name: name,
+        rank: rank,
+        subpoints: builderSubpoints.map(sp => ({ text: sp, done: false })),
+        isActive: state.quests.filter(q => q.isActive).length === 0, // если нет активных, делаем этот активным
+        completed: false,
+        failed: false,
+        isDaily: false
+    };
+
+    state.quests.push(newQuest);
+    
+    // Очистка формы
+    document.getElementById('questNameInput').value = '';
+    builderSubpoints = [];
+    renderBuilderSubpoints();
+
+    saveState();
+    updateUI();
+    showToast(`Квест создан! Ранг: ${rank}`);
+}
+
+// ====================== ОЦЕНКА КВЕСТОВ (ЛОКАЛЬНАЯ) ======================
+function evaluateQuestLocal(name, subpoints) {
+    const text = (name + ' ' + subpoints.join(' ')).toLowerCase();
+    let score = subpoints.length; // базовый скор по количеству
+
+    const highKeywords = ['спортзал', 'тренировка', 'марафон', 'проект', 'экзамен', 'сложный', 'изучить', 'выучить', 'написать', 'пробежка', 'турник', 'отжимания'];
+    const midKeywords = ['убраться', 'помыть', 'посуда', 'урок', 'домашка', 'чтение', 'книга', 'прогулка'];
+    const lowKeywords = ['попить', 'вода', 'полежать', 'поспать', 'отдохнуть', 'перерыв', 'разминка', 'зарядка'];
+
+    highKeywords.forEach(kw => { if (text.includes(kw)) score += 8; });
+    midKeywords.forEach(kw => { if (text.includes(kw)) score += 4; });
+    lowKeywords.forEach(kw => { if (text.includes(kw)) score -= 3; });
+
+    if (score >= 30) return 'SSS';
+    if (score >= 22) return 'SS';
+    if (score >= 16) return 'S';
+    if (score >= 12) return 'A';
+    if (score >= 8)  return 'B';
+    if (score >= 5)  return 'C';
+    if (score >= 2)  return 'D';
+    return 'E';
+}
+
+// ====================== ОЦЕНКА КВЕСТОВ (GROQ API) ======================
+async function evaluateQuestWithGroq(name, subpoints) {
+    const key = state.groqKey || GROQ_API_KEY;
+    const prompt = `Ты — система рангов из Solo Leveling. Оцени квест по шкале E, D, C, B, A, S, SS, SSS.
+Название: ${name}
+Подпункты: ${subpoints.join(', ')}
+Примеры: "попить воды" = E; "убраться дома" = C; "сходить в спортзал" = S; "марафон" = SS/SSS.
+Верни ТОЛЬКО ОДНУ букву ранга (E, D, C, B, A, S, SS или SSS). Никаких объяснений.`;
+
+    try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${key}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'llama3-8b-8192',
+                messages: [{ role: 'user', content: prompt }],
+                temperature: 0.1
+            })
+        });
+
+        if (!response.ok) throw new Error('API Error');
+        const data = await response.json();
+        let result = data.choices[0].message.content.trim().toUpperCase();
+        
+        // Ищем ранг в ответе (на случай если нейросеть написала лишнее)
+        for (let r of [...RANKS].reverse()) {
+            if (result.includes(r)) return r;
+        }
+        return 'C'; // fallback
+    } catch (e) {
+        console.error(e);
+        return evaluateQuestLocal(name, subpoints); // если ошибка, используем алгоритм
+    }
+}
+
+// ====================== ОБНОВЛЕНИЕ ВСЕГО UI ======================
+function updateUI() {
+    updateMainUI();
+    renderQuests();
+    renderShop();
+    saveState();
+}
+
+// ЗАГЛУШКИ ДЛЯ СЛЕДУЮЩЕЙ ЧАСТИ (они будут перезаписаны)
+function renderQuests() {}
+function renderShop() {}
+function updateStatsUI() {}
+function checkDailyReset() {}
+function saveGroqKey() {}
+function clearGroqKey() {}
+function exportData() {}
+function importData() {}
+function closeOverlay() {}
+
+// ИНИЦИАЛИЗАЦИЯ
+window.onload = () => {
+    loadState();
+    
+    // Заполняем поле ключа, если он есть
+    const keyInput = document.getElementById('groqKeyInput');
+    if (keyInput && state.groqKey) {
+        keyInput.value = state.groqKey;
+        document.getElementById('groqStatus').textContent = 'ключ задан ✓';
+        document.getElementById('groqStatus').style.color = 'var(--success)';
+    }
+    
+    updateUI();
+};
 </script>
 </body>
 </html>
