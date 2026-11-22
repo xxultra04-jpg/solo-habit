@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Solo Habit: Стань сильнее</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+--primary:#a855f7;--primary-glow:#c084fc;--secondary:#3b82f6;--secondary-glow:#60a5fa;
+--bg-card:rgba(15,15,25,.92);--text-main:#e2e8f0;--text-dim:#94a3b8;--coin:#fbbf24;
+--danger:#ef4444;--success:#22c55e;
+}
+body.light{
+--bg-card:rgba(240,240,250,.96);--text-main:#1e1e2e;--text-dim:#4a5568;
+--primary:#7c3aed;--primary-glow:#8b5cf6;--secondary:#2563eb;--secondary-glow:#3b82f6;
+}
+body{min-height:100vh;background:#0a0a12;font-family:'Rajdhani',sans-serif;color:var(--text-main);transition:background .3s,color .3s;overflow-x:hidden}
+body.light{background:#d8d8e8}
+.rank-font{font-family:'Black Ops One',cursive;letter-spacing:2px}
+/* ===== APP CONTAINER ===== */
+#app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg-card);position:relative;padding-bottom:76px;border-left:1px solid rgba(168,85,247,.15);border-right:1px solid rgba(168,85,247,.15)}
+/* ===== TOP HEADER ===== */
+.top-bar{padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between}
+.top-bar h1{font-size:1.3rem;background:linear-gradient(135deg,var(--primary-glow),var(--secondary-glow));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:1px}
+.top-bar .sub{font-size:.6rem;color:var(--text-dim);letter-spacing:3px}
+.coin-badge{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.4);padding:6px 12px;border-radius:30px;border:1px solid var(--coin);box-shadow:0 0 10px rgba(251,191,36,.4);font-weight:800;color:var(--coin);font-size:.9rem}
+/* ===== TABS ===== */
+.tab-content{display:none;padding:0 16px 20px;animation:fadeIn .3s}
+.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ===== PROFILE ===== */
+.profile-card{background:rgba(0,0,0,.35);border:1px solid var(--primary);border-radius:22px;padding:16px;box-shadow:0 0 18px rgba(168,85,247,.3);margin-bottom:16px;position:relative;overflow:hidden}
+.avatar-row{display:flex;align-items:center;gap:14px}
+.avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#1a1a2e,#0d0d1a);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;box-shadow:0 0 14px var(--primary)}
+.profile-info{flex:1;min-width:0}
+.profile-title{font-size:.85rem;font-weight:700;color:var(--primary-glow);letter-spacing:1px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.profile-level{font-size:.7rem;color:var(--text-dim);letter-spacing:1px}
+.rank-badge{display:inline-block;padding:3px 14px;border-radius:8px;font-size:.8rem;font-weight:900;margin-top:4px;background:rgba(0,0,0,.5)}
+/* ранги: цвета и ауры */
+.rank-E{color:#fff;text-shadow:none}
+.rank-D{color:#a0522d;text-shadow:0 0 6px #a0522d}
+.rank-C{color:#22c55e;text-shadow:0 0 8px #22c55e}
+.rank-B{color:#f97316;text-shadow:0 0 10px #f97316}
+.rank-A{color:#facc15;text-shadow:0 0 12px #facc15,0 0 20px #ca8a04}
+.rank-S{color:#ef4444;text-shadow:0 0 14px #ef4444,0 0 28px #7f1d1d,0 0 40px #450a0a}
+.rank-SS{color:#a855f7;text-shadow:0 0 16px #a855f7,0 0 32px #6b21a8,0 0 48px #4c1d95}
+.rank-SSS{animation:sssGlow 2s infinite;background:linear-gradient(90deg,#ff0000,#ff8800,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000);background-size:400%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px #fff) drop-shadow(0 0 28px #a855f7)}
+@keyframes sssGlow{0%{background-position:0%}100%{background-position:400%}}
+.xp-bar-wrap{margin-top:14px}
+.xp-bar-bg{height:16px;background:#0a0a14;border-radius:20px;border:1px solid var(--secondary);overflow:hidden;box-shadow:0 0 8px var(--secondary) inset}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .5s;box-shadow:0 0 12px var(--primary-glow);border-radius:20px}
+.xp-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--text-dim);margin-top:3px;letter-spacing:1px}
+/* ===== HERO ===== */
+.hero-img{width:100%;height:150px;border-radius:18px;border:1px solid var(--secondary);background:linear-gradient(145deg,#0b0b16,#1a1a2e);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 0 18px rgba(59,130,246,.4);margin-bottom:16px}
+.hero-img img{width:100%;height:100%;object-fit:cover}
+.hero-img .fallback{font-size:1.1rem;font-weight:900;letter-spacing:4px;color:var(--primary-glow);text-shadow:0 0 16px var(--primary);text-align:center;padding:10px}
+/* ===== ACTIVE QUEST ===== */
+.active-quest{background:rgba(0,0,0,.45);border-radius:22px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid var(--primary)}
+.active-quest .aq-label{font-size:.7rem;letter-spacing:2px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase}
+.active-quest .aq-title{font-size:1.3rem;font-weight:800;margin-bottom:10px}
+.active-quest .aq-progress{font-size:.85rem;color:var(--text-dim);margin-bottom:12px}
+/* ===== BUTTONS ===== */
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1px;cursor:pointer;transition:transform .15s,filter .15s;text-transform:uppercase}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 0 18px rgba(168,85,247,.5)}
+.btn-secondary{background:rgba(0,0,0,.4);border:1px solid var(--secondary);color:var(--text-main)}
+.btn-danger{background:rgba(239,68,68,.15);border:1px solid var(--danger);color:var(--danger)}
+.btn-small{width:auto;padding:8px 16px;font-size:.8rem;display:inline-block}
+/* ===== INPUTS ===== */
+.input-field{width:100%;padding:13px 16px;background:#0d0d1a;border:1px solid var(--secondary);border-radius:14px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:1rem;outline:none;margin-bottom:10px}
+.input-field:focus{border-color:var(--primary);box-shadow:0 0 14px var(--primary)}
+/* ===== QUEST LIST ===== */
+.quest-item{background:rgba(0,0,0,.35);border:1px solid var(--secondary);border-radius:16px;padding:14px;margin-bottom:10px;transition:border .2s}
+.quest-item:hover{border-color:var(--primary)}
+.quest-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.quest-name{font-weight:700;font-size:1.05rem;flex:1}
+.quest-rank-badge{font-size:.75rem;padding:2px 10px;border-radius:6px;background:rgba(0,0,0,.5);margin-left:8px}
+.quest-subprogress{font-size:.75rem;color:var(--text-dim);margin-bottom:6px}
+.subprogress-bar{height:6px;background:#0a0a14;border-radius:10px;overflow:hidden;margin-bottom:8px}
+.subprogress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .3s}
+.subpoints{list-style:none;margin:8px 0}
+.subpoints li{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9rem}
+.subpoints li:last-child{border-bottom:none}
+.subpoints input[type=checkbox]{width:20px;height:20px;accent-color:var(--primary);cursor:pointer;flex-shrink:0}
+.subpoints label{flex:1;cursor:pointer}
+.quest-actions{display:flex;gap:8px;margin-top:10px}
+.quest-actions .btn{width:auto;flex:1;padding:10px;font-size:.8rem}
+/* ===== SHOP ===== */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.shop-item{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:14px;text-align:center;cursor:pointer;transition:transform .15s,border .2s}
+.shop-item:active{transform:scale(.97)}
+.shop-item:hover{border-color:var(--primary);box-shadow:0 0 14px rgba(168,85,247,.4)}
+.shop-item.active-theme{border:2px solid var(--primary-glow);box-shadow:0 0 20px var(--primary-glow)}
+.shop-item .si-icon{font-size:1.8rem;margin-bottom:6px}
+.shop-item .si-name{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.shop-item .si-price{font-size:.75rem;color:var(--coin);font-weight:800}
+.shop-item.owned{opacity:.55}
+.shop-item.locked{opacity:.4;cursor:not-allowed}
+.section-title{font-size:.85rem;letter-spacing:3px;color:var(--primary-glow);text-shadow:0 0 8px var(--primary);margin:20px 0 10px;text-transform:uppercase;border-left:4px solid var(--secondary);padding-left:10px}
+/* ===== STATS ===== */
+.stat-big{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:16px;text-align:center}
+.stat-card .sc-val{font-size:1.8rem;font-weight:900;color:var(--primary-glow);text-shadow:0 0 12px var(--primary)}
+.stat-card .sc-lbl{font-size:.65rem;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.chart-wrap{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:16px;margin-bottom:16px}
+.chart-bars{display:flex;align-items:flex-end;justify-content:space-around;height:120px;gap:6px;margin-top:12px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.chart-bar{width:100%;max-width:28px;background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:6px 6px 0 0;min-height:3px;transition:height .4s}
+.chart-day{font-size:.6rem;color:var(--text-dim)}
+.chart-val{font-size:.7rem;font-weight:700;color:var(--primary-glow)}
+/* ===== SETTINGS ===== */
+.settings-group{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:16px;margin-bottom:12px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:.9rem;font-weight:600}
+.settings-desc{font-size:.7rem;color:var(--text-dim);margin-top:2px}
+.switch{position:relative;width:46px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;inset:0;background:#333;border-radius:30px;cursor:pointer;transition:.3s}
+.switch .slider::before{content:"";position:absolute;height:20px;width:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s}
+.switch input:checked+.slider{background:var(--primary)}
+.switch input:checked+.slider::before{transform:translateX(20px)}
+.warning-box{background:rgba(239,68,68,.1);border:1px solid var(--danger);border-radius:12px;padding:12px;font-size:.75rem;color:#fca5a5;line-height:1.5;margin-bottom:12px}
+/* ===== BOTTOM NAV ===== */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;background:rgba(10,10,18,.97);border-top:1px solid var(--primary);backdrop-filter:blur(10px);z-index:100;padding:6px 0 8px}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:none;border:none;color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:.6rem;letter-spacing:.5px;cursor:pointer;transition:color .2s}
+.nav-btn.active{color:var(--primary-glow)}
+.nav-btn .nav-icon{font-size:1.3rem;line-height:1}
+/* ===== FULLSCREEN OVERLAYS ===== */
+.fullscreen-overlay{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:hidden}
+.fullscreen-overlay.show{display:flex}
+#rewardScreen{background:#000}
+#rewardScreen .gif-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;z-index:0}
+#rewardScreen .overlay-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:20px;width:100%}
+#rewardScreen .reward-title{font-size:1.6rem;line-height:1.3;font-weight:900;text-transform:uppercase;animation:popIn .6s cubic-bezier(.3,1.5,.5,1)}
+#rewardScreen .reward-stats{font-size:1.4rem;font-weight:800;color:var(--coin);text-shadow:0 0 18px var(--coin);animation:popIn .7s .2s both}
+#failScreen{background:radial-gradient(circle at 50% 40%,#1a0505,#000)}
+#failScreen .fail-title{font-size:1.8rem;font-weight:900;color:#ef4444;text-shadow:0 0 20px #ef4444,0 0 40px #7f1d1d;text-transform:uppercase;margin-bottom:16px}
+#failScreen .fail-stats{font-size:1.2rem;font-weight:800;color:#fca5a5;margin-bottom:24px}
+@keyframes popIn{0%{transform:scale(.5);opacity:0}100%{transform:scale(1);opacity:1}}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(0,0,0,.9);border:1px solid var(--primary);border-radius:12px;padding:12px 20px;font-weight:700;z-index:10000;transition:transform .3s;box-shadow:0 0 20px rgba(168,85,247,.6);font-size:.85rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.error{border-color:var(--danger);box-shadow:0 0 20px rgba(239,68,68,.6)}
+/* ===== EMPTY STATE ===== */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:.9rem;font-style:italic;opacity:.6}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div id="app">
+<div class="top-bar">
+<div>
+<h1 class="rank-font">Solo Habit</h1>
+<div class="sub">СТАНЬ СИЛЬНЕЕ</div>
+</div>
+<div class="coin-badge"><span>🪙</span><span id="topCoins">0</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 1: ГЛАВНАЯ -->
+<!-- ============================================================ -->
+<div class="tab-content active" id="tab-home">
+<div class="profile-card">
+<div class="avatar-row">
+<div class="avatar" id="avatarDisplay">👤</div>
+<div class="profile-info">
+<div class="profile-title" id="profileTitle">Новичок</div>
+<div class="profile-level">Уровень <span id="levelDisplay">1</span></div>
+<span class="rank-badge rank-E" id="rankBadge">E</span>
+</div>
+</div>
+<div class="xp-bar-wrap">
+<div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+<div class="xp-labels"><span id="xpText">0 / 100 XP</span><span id="xpTotalText">0 XP</span></div>
+</div>
+</div>
+
+<div class="hero-img" id="heroImg">
+<div class="fallback">⚔️ СОН ДЖИН-ВУ ⚔️</div>
+</div>
+
+<div class="section-title">Активный квест</div>
+<div id="homeActiveQuest"><div class="empty-state">Нет активного квеста. Создай его во вкладке «Квесты».</div></div>
+
+<div class="section-title">Быстрые действия</div>
+<button class="btn btn-primary" onclick="switchTab('quests')">⚔️ Перейти к квестам</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 2: КВЕСТЫ -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-quests">
+<div class="section-title">Создать квест</div>
+<input type="text" class="input-field" id="questNameInput" placeholder="Название квеста..." maxlength="60">
+<div id="subpointBuilder">
+<div class="subpoint-input-row" style="display:flex;gap:8px;margin-bottom:8px">
+<input type="text" class="input-field" id="subpointInput" placeholder="Подпункт (например: Разминка)" maxlength="80" style="margin-bottom:0">
+<button class="btn btn-secondary btn-small" onclick="addSubpointToBuilder()" style="flex-shrink:0">+</button>
+</div>
+<ul id="builderSubpoints" style="list-style:none;margin-bottom:10px"></ul>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:16px">
+<button class="btn btn-primary" onclick="createQuest()" style="flex:1">Создать квест</button>
+</div>
+
+<div class="section-title">Активный квест</div>
+<div id="activeQuestSection"><div class="empty-state">Нет активного квеста</div></div>
+
+<div class="section-title">Все квесты</div>
+<div id="allQuestsList"><div class="empty-state">Пока нет квестов</div></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 3: МАГАЗИН -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-shop">
+<div class="section-title">Темы</div>
+<div class="shop-grid" id="themesGrid"></div>
+<div class="section-title">Аватары</div>
+<div class="shop-grid" id="avatarsGrid"></div>
+<div class="section-title">Титулы</div>
+<div class="shop-grid" id="titlesGrid"></div>
+<div class="section-title">Бусты</div>
+<div class="shop-grid" id="boostsGrid"></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 4: СТАТИСТИКА -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-stats">
+<div class="stat-big">
+<div class="stat-card"><div class="sc-val" id="statTotalQuests">0</div><div class="sc-lbl">Выполнено квестов</div></div>
+<div class="stat-card"><div class="sc-val" id="statTotalXP">0</div><div class="sc-lbl">Всего XP</div></div>
+<div class="stat-card"><div class="sc-val" id="statStreak">0</div><div class="sc-lbl">Лучшая серия (дней)</div></div>
+<div class="stat-card"><div class="sc-val" id="statTotalCoins">0</div><div class="sc-lbl">Заработано монет</div></div>
+</div>
+<div class="section-title">Активность за 7 дней</div>
+<div class="chart-wrap">
+<div class="chart-bars" id="chartBars"></div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TAB 5: НАСТРОЙКИ -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-settings">
+<div class="warning-box">
+⚠️ <b>Важно:</b> приложение не может проверить, действительно ли ты выполнил квест. Отметка «Выполнено» — твоя ответственность и честность перед самим собой. Система верит тебе.
+</div>
+
+<div class="section-title">Groq API (нейросеть)</div>
+<div class="settings-group">
+<div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
+<div class="settings-label">🔑 Groq API Key</div>
+<div class="settings-desc">Получить бесплатно: console.groq.com/keys. Ключ хранится только на твоём устройстве.</div>
+<input type="password" class="input-field" id="groqKeyInput" placeholder="gsk_..." style="margin-top:4px;margin-bottom:0">
+</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-primary btn-small" onclick="saveGroqKey()" style="flex:1">Сохранить ключ</button>
+<button class="btn btn-secondary btn-small" onclick="clearGroqKey()" style="flex:1">Удалить ключ</button>
+</div>
+<div style="font-size:.7rem;color:var(--text-dim);margin-top:8px">Статус: <span id="groqStatus">не задан</span></div>
+</div>
+
+<div class="section-title">Внешний вид</div>
+<div class="settings-group">
+<div class="settings-row">
+<div><div class="settings-label">Тёмный режим</div><div class="settings-desc">Переключить светлую/тёмную тему</div></div>
+<label class="switch"><input type="checkbox" id="darkModeToggle" checked><span class="slider"></span></label>
+</div>
+</div>
+
+<div class="section-title">Уведомления</div>
+<div class="settings-group">
+<div class="settings-row">
+<div><div class="settings-label">Напоминания</div><div class="settings-desc">Напоминать о квестах (если разрешено браузером)</div></div>
+<label class="switch"><input type="checkbox" id="notifyToggle"><span class="slider"></span></label>
+</div>
+</div>
+
+<div class="section-title">Данные</div>
+<div class="settings-group">
+<button class="btn btn-secondary" onclick="exportData()" style="margin-bottom:8px">📥 Экспорт прогресса (JSON)</button>
+<button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Импорт прогресса</button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+</div>
+
+<div class="section-title">О приложении</div>
+<div class="settings-group" style="font-size:.8rem;line-height:1.6;color:var(--text-dim)">
+<b style="color:var(--primary-glow)">Solo Habit: Стань сильнее</b><br>
+Школьный индивидуальный проект.<br>
+Технологии: HTML, CSS, JavaScript, LocalStorage, PWA, Groq API.<br>
+Данные хранятся локально на устройстве.
+</div>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<div class="bottom-nav">
+<button class="nav-btn active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span>Главная</button>
+<button class="nav-btn" data-tab="quests" onclick="switchTab('quests')"><span class="nav-icon">⚔️</span>Квесты</button>
+<button class="nav-btn" data-tab="shop" onclick="switchTab('shop')"><span class="nav-icon">🛒</span>Магазин</button>
+<button class="nav-btn" data-tab="stats" onclick="switchTab('stats')"><span class="nav-icon">📊</span>Статистика</button>
+<button class="nav-btn" data-tab="settings" onclick="switchTab('settings')"><span class="nav-icon">⚙️</span>Настройки</button>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ЭКРАН НАГРАДЫ (скрытый) -->
+<!-- ============================================================ -->
+<div class="fullscreen-overlay" id="rewardScreen">
+<img class="gif-bg" id="rewardGif" src="reward.gif" alt="" onerror="this.style.display='none'">
+<div class="overlay-content">
+<div class="reward-title rank-font" id="rewardTitle">КВЕСТ ВЫПОЛНЕН</div>
+<div class="reward-stats" id="rewardStats">+10 XP · +5 🪙</div>
+<button class="btn btn-primary" onclick="closeOverlay('rewardScreen')" style="max-width:280px">Вернуться на главную</button>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ЭКРАН ПРОВАЛА (скрытый) -->
+<!-- ============================================================ -->
+<div class="fullscreen-overlay" id="failScreen">
+<div class="overlay-content">
+<div class="fail-title rank-font">КВЕСТ ПРОВАЛЕН</div>
+<div class="fail-stats" id="failStats">−5 XP · Прогресс сброшен</div>
+<button class="btn btn-primary" onclick="closeOverlay('failScreen')" style="max-width:280px">Вернуться на главную</button>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== JAVASCRIPT (часть 1) ===== -->
+<script>
+/* СЮДА БУДЕТ ВСТАВЛЕН JS ЧАСТЬ 1 (следующее сообщение) */
+</script>
+</body>
+</html>
