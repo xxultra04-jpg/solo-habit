@@ -1,6 +1,7 @@
 {
   "name": "Solo Habit: Стань сильнее",
   "short_name": "Solo Habit",
+  "id": "/solo-habit/",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a12",
