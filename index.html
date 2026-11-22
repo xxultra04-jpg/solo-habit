@@ -4,37 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Solo Habit: Стань сильнее</title>
-    <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#a855f7">
+<link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
---primary:#a855f7;--primary-glow:#c084fc;--secondary:#3b82f6;--secondary-glow:#60a5fa;
---bg-card:rgba(15,15,25,.92);--text-main:#e2e8f0;--text-dim:#94a3b8;--coin:#fbbf24;
---danger:#ef4444;--success:#22c55e;
-}
-body.light{
---bg-card:rgba(240,240,250,.96);--text-main:#1e1e2e;--text-dim:#4a5568;
---primary:#7c3aed;--primary-glow:#8b5cf6;--secondary:#2563eb;--secondary-glow:#3b82f6;
-}
+:root{--primary:#a855f7;--primary-glow:#c084fc;--secondary:#3b82f6;--secondary-glow:#60a5fa;--bg-card:rgba(15,15,25,.92);--text-main:#e2e8f0;--text-dim:#94a3b8;--coin:#fbbf24;--danger:#ef4444;--success:#22c55e;}
+body.light{--bg-card:rgba(240,240,250,.96);--text-main:#1e1e2e;--text-dim:#4a5568;--primary:#7c3aed;--primary-glow:#8b5cf6;--secondary:#2563eb;--secondary-glow:#3b82f6;}
 body{min-height:100vh;background:#0a0a12;font-family:'Rajdhani',sans-serif;color:var(--text-main);transition:background .3s,color .3s;overflow-x:hidden}
 body.light{background:#d8d8e8}
 .rank-font{font-family:'Black Ops One',cursive;letter-spacing:2px}
-/* ===== APP CONTAINER ===== */
 #app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--bg-card);position:relative;padding-bottom:76px;border-left:1px solid rgba(168,85,247,.15);border-right:1px solid rgba(168,85,247,.15)}
-/* ===== TOP HEADER ===== */
 .top-bar{padding:16px 18px 10px;display:flex;align-items:center;justify-content:space-between}
 .top-bar h1{font-size:1.3rem;background:linear-gradient(135deg,var(--primary-glow),var(--secondary-glow));-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:1px}
 .top-bar .sub{font-size:.6rem;color:var(--text-dim);letter-spacing:3px}
 .coin-badge{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.4);padding:6px 12px;border-radius:30px;border:1px solid var(--coin);box-shadow:0 0 10px rgba(251,191,36,.4);font-weight:800;color:var(--coin);font-size:.9rem}
-/* ===== TABS ===== */
 .tab-content{display:none;padding:0 16px 20px;animation:fadeIn .3s}
 .tab-content.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-/* ===== PROFILE ===== */
 .profile-card{background:rgba(0,0,0,.35);border:1px solid var(--primary);border-radius:22px;padding:16px;box-shadow:0 0 18px rgba(168,85,247,.3);margin-bottom:16px;position:relative;overflow:hidden}
 .avatar-row{display:flex;align-items:center;gap:14px}
 .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#1a1a2e,#0d0d1a);border:2px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;box-shadow:0 0 14px var(--primary)}
@@ -42,7 +31,6 @@ body.light{background:#d8d8e8}
 .profile-title{font-size:.85rem;font-weight:700;color:var(--primary-glow);letter-spacing:1px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .profile-level{font-size:.7rem;color:var(--text-dim);letter-spacing:1px}
 .rank-badge{display:inline-block;padding:3px 14px;border-radius:8px;font-size:.8rem;font-weight:900;margin-top:4px;background:rgba(0,0,0,.5)}
-/* ранги: цвета и ауры */
 .rank-E{color:#fff;text-shadow:none}
 .rank-D{color:#a0522d;text-shadow:0 0 6px #a0522d}
 .rank-C{color:#22c55e;text-shadow:0 0 8px #22c55e}
@@ -56,32 +44,25 @@ body.light{background:#d8d8e8}
 .xp-bar-bg{height:16px;background:#0a0a14;border-radius:20px;border:1px solid var(--secondary);overflow:hidden;box-shadow:0 0 8px var(--secondary) inset}
 .xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .5s;box-shadow:0 0 12px var(--primary-glow);border-radius:20px}
 .xp-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--text-dim);margin-top:3px;letter-spacing:1px}
-/* ===== HERO ===== */
-.hero-img{width:100%;height:340px;border-radius:18px;border:1px solid var(--secondary);background:linear-gradient(145deg,#0b0b16,#1a1a2e);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 0 18px rgba(59,130,246,.4);margin-bottom:16px}
-.hero-img img{width:100%;height:100%;object-fit:cover}
-.hero-img .fallback{font-size:1.1rem;font-weight:900;letter-spacing:4px;color:var(--primary-glow);text-shadow:0 0 16px var(--primary);text-align:center;padding:10px}
-/* ===== ACTIVE QUEST ===== */
+.hero-img{width:100%;height:340px;border-radius:18px;border:1px solid var(--secondary);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;box-shadow:0 0 18px rgba(59,130,246,.4);margin-bottom:16px}
+.hero-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+.section-title{font-size:.85rem;letter-spacing:3px;color:var(--primary-glow);text-shadow:0 0 8px var(--primary);margin:20px 0 10px;text-transform:uppercase;border-left:4px solid var(--secondary);padding-left:10px}
 .active-quest{background:rgba(0,0,0,.45);border-radius:22px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;border:1px solid var(--primary)}
 .active-quest .aq-label{font-size:.7rem;letter-spacing:2px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase}
 .active-quest .aq-title{font-size:1.3rem;font-weight:800;margin-bottom:10px}
 .active-quest .aq-progress{font-size:.85rem;color:var(--text-dim);margin-bottom:12px}
-/* ===== BUTTONS ===== */
 .btn{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-family:'Rajdhani',sans-serif;font-size:1rem;font-weight:800;letter-spacing:1px;cursor:pointer;transition:transform .15s,filter .15s;text-transform:uppercase}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 0 18px rgba(168,85,247,.5)}
 .btn-secondary{background:rgba(0,0,0,.4);border:1px solid var(--secondary);color:var(--text-main)}
-.btn-danger{background:rgba(239,68,68,.15);border:1px solid var(--danger);color:var(--danger)}
 .btn-small{width:auto;padding:8px 16px;font-size:.8rem;display:inline-block}
-/* ===== INPUTS ===== */
 .input-field{width:100%;padding:13px 16px;background:#0d0d1a;border:1px solid var(--secondary);border-radius:14px;color:#fff;font-family:'Rajdhani',sans-serif;font-size:1rem;outline:none;margin-bottom:10px}
 .input-field:focus{border-color:var(--primary);box-shadow:0 0 14px var(--primary)}
-/* ===== QUEST LIST ===== */
 .quest-item{background:rgba(0,0,0,.35);border:1px solid var(--secondary);border-radius:16px;padding:14px;margin-bottom:10px;transition:border .2s}
 .quest-item:hover{border-color:var(--primary)}
 .quest-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .quest-name{font-weight:700;font-size:1.05rem;flex:1}
 .quest-rank-badge{font-size:.75rem;padding:2px 10px;border-radius:6px;background:rgba(0,0,0,.5);margin-left:8px}
-.quest-subprogress{font-size:.75rem;color:var(--text-dim);margin-bottom:6px}
 .subprogress-bar{height:6px;background:#0a0a14;border-radius:10px;overflow:hidden;margin-bottom:8px}
 .subprogress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .3s}
 .subpoints{list-style:none;margin:8px 0}
@@ -91,7 +72,6 @@ body.light{background:#d8d8e8}
 .subpoints label{flex:1;cursor:pointer}
 .quest-actions{display:flex;gap:8px;margin-top:10px}
 .quest-actions .btn{width:auto;flex:1;padding:10px;font-size:.8rem}
-/* ===== SHOP ===== */
 .shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .shop-item{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:14px;text-align:center;cursor:pointer;transition:transform .15s,border .2s}
 .shop-item:active{transform:scale(.97)}
@@ -100,10 +80,6 @@ body.light{background:#d8d8e8}
 .shop-item .si-icon{font-size:1.8rem;margin-bottom:6px}
 .shop-item .si-name{font-weight:700;font-size:.9rem;margin-bottom:4px}
 .shop-item .si-price{font-size:.75rem;color:var(--coin);font-weight:800}
-.shop-item.owned{opacity:.55}
-.shop-item.locked{opacity:.4;cursor:not-allowed}
-.section-title{font-size:.85rem;letter-spacing:3px;color:var(--primary-glow);text-shadow:0 0 8px var(--primary);margin:20px 0 10px;text-transform:uppercase;border-left:4px solid var(--secondary);padding-left:10px}
-/* ===== STATS ===== */
 .stat-big{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
 .stat-card{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:16px;text-align:center}
 .stat-card .sc-val{font-size:1.8rem;font-weight:900;color:var(--primary-glow);text-shadow:0 0 12px var(--primary)}
@@ -114,7 +90,6 @@ body.light{background:#d8d8e8}
 .chart-bar{width:100%;max-width:28px;background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:6px 6px 0 0;min-height:3px;transition:height .4s}
 .chart-day{font-size:.6rem;color:var(--text-dim)}
 .chart-val{font-size:.7rem;font-weight:700;color:var(--primary-glow)}
-/* ===== SETTINGS ===== */
 .settings-group{background:rgba(0,0,0,.4);border:1px solid var(--secondary);border-radius:16px;padding:16px;margin-bottom:12px}
 .settings-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
 .settings-row:last-child{border-bottom:none}
@@ -127,12 +102,10 @@ body.light{background:#d8d8e8}
 .switch input:checked+.slider{background:var(--primary)}
 .switch input:checked+.slider::before{transform:translateX(20px)}
 .warning-box{background:rgba(239,68,68,.1);border:1px solid var(--danger);border-radius:12px;padding:12px;font-size:.75rem;color:#fca5a5;line-height:1.5;margin-bottom:12px}
-/* ===== BOTTOM NAV ===== */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;background:rgba(10,10,18,.97);border-top:1px solid var(--primary);backdrop-filter:blur(10px);z-index:100;padding:6px 0 8px}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;background:none;border:none;color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:.6rem;letter-spacing:.5px;cursor:pointer;transition:color .2s}
 .nav-btn.active{color:var(--primary-glow)}
 .nav-btn .nav-icon{font-size:1.3rem;line-height:1}
-/* ===== FULLSCREEN OVERLAYS ===== */
 .fullscreen-overlay{position:fixed;inset:0;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:hidden}
 .fullscreen-overlay.show{display:flex}
 #rewardScreen{background:#000}
@@ -147,13 +120,10 @@ body.light{background:#d8d8e8}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:rgba(0,0,0,.9);border:1px solid var(--primary);border-radius:12px;padding:12px 20px;font-weight:700;z-index:10000;transition:transform .3s;box-shadow:0 0 20px rgba(168,85,247,.6);font-size:.85rem}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.error{border-color:var(--danger);box-shadow:0 0 20px rgba(239,68,68,.6)}
-/* ===== EMPTY STATE ===== */
 .empty-state{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:.9rem;font-style:italic;opacity:.6}
 </style>
 </head>
 <body>
-
-<!-- ===== TOP BAR ===== -->
 <div id="app">
 <div class="top-bar">
 <div>
@@ -163,9 +133,6 @@ body.light{background:#d8d8e8}
 <div class="coin-badge"><span>🪙</span><span id="topCoins">0</span></div>
 </div>
 
-<!-- ============================================================ -->
-<!-- TAB 1: ГЛАВНАЯ -->
-<!-- ============================================================ -->
 <div class="tab-content active" id="tab-home">
 <div class="profile-card">
 <div class="avatar-row">
@@ -181,26 +148,23 @@ body.light{background:#d8d8e8}
 <div class="xp-labels"><span id="xpText">0 / 100 XP</span><span id="xpTotalText">0 XP</span></div>
 </div>
 </div>
-
 <div class="hero-img" id="heroImg" style="position: relative;">
     <img src="hero.jpg?v=4" alt="Сон Джин-Ву" style="width:100%; height:100%; object-fit:cover; object-position: top;">
+    <div style="position: absolute; top: 15px; left: 15px; font-family: 'Black Ops One', sans-serif; font-size: 1.3rem; color: #d8b4fe; text-shadow: 0 0 8px #a855f7, 0 0 16px #a855f7, 0 0 30px #7e22ce; line-height: 1.2; pointer-events: none; letter-spacing: 1px;">
+        СДЕЛАЙ СВОЮ<br>ДИСЦИПЛИНУ
+    </div>
 </div>
-
 <div class="section-title">Активный квест</div>
 <div id="homeActiveQuest"><div class="empty-state">Нет активного квеста. Создай его во вкладке «Квесты».</div></div>
-
 <div class="section-title">Быстрые действия</div>
 <button class="btn btn-primary" onclick="switchTab('quests')">⚔️ Перейти к квестам</button>
 </div>
 
-<!-- ============================================================ -->
-<!-- TAB 2: КВЕСТЫ -->
-<!-- ============================================================ -->
 <div class="tab-content" id="tab-quests">
 <div class="section-title">Создать квест</div>
 <input type="text" class="input-field" id="questNameInput" placeholder="Название квеста..." maxlength="60">
 <div id="subpointBuilder">
-<div class="subpoint-input-row" style="display:flex;gap:8px;margin-bottom:8px">
+<div style="display:flex;gap:8px;margin-bottom:8px">
 <input type="text" class="input-field" id="subpointInput" placeholder="Подпункт (например: Разминка)" maxlength="80" style="margin-bottom:0">
 <button class="btn btn-secondary btn-small" onclick="addSubpointToBuilder()" style="flex-shrink:0">+</button>
 </div>
@@ -209,17 +173,12 @@ body.light{background:#d8d8e8}
 <div style="display:flex;gap:8px;margin-bottom:16px">
 <button class="btn btn-primary" onclick="createQuest()" style="flex:1">Создать квест</button>
 </div>
-
 <div class="section-title">Активный квест</div>
 <div id="activeQuestSection"><div class="empty-state">Нет активного квеста</div></div>
-
 <div class="section-title">Все квесты</div>
 <div id="allQuestsList"><div class="empty-state">Пока нет квестов</div></div>
 </div>
 
-<!-- ============================================================ -->
-<!-- TAB 3: МАГАЗИН -->
-<!-- ============================================================ -->
 <div class="tab-content" id="tab-shop">
 <div class="section-title">Темы</div>
 <div class="shop-grid" id="themesGrid"></div>
@@ -231,9 +190,6 @@ body.light{background:#d8d8e8}
 <div class="shop-grid" id="boostsGrid"></div>
 </div>
 
-<!-- ============================================================ -->
-<!-- TAB 4: СТАТИСТИКА -->
-<!-- ============================================================ -->
 <div class="tab-content" id="tab-stats">
 <div class="stat-big">
 <div class="stat-card"><div class="sc-val" id="statTotalQuests">0</div><div class="sc-lbl">Выполнено квестов</div></div>
@@ -242,19 +198,11 @@ body.light{background:#d8d8e8}
 <div class="stat-card"><div class="sc-val" id="statTotalCoins">0</div><div class="sc-lbl">Заработано монет</div></div>
 </div>
 <div class="section-title">Активность за 7 дней</div>
-<div class="chart-wrap">
-<div class="chart-bars" id="chartBars"></div>
-</div>
+<div class="chart-wrap"><div class="chart-bars" id="chartBars"></div></div>
 </div>
 
-<!-- ============================================================ -->
-<!-- TAB 5: НАСТРОЙКИ -->
-<!-- ============================================================ -->
 <div class="tab-content" id="tab-settings">
-<div class="warning-box">
-⚠️ <b>Важно:</b> приложение не может проверить, действительно ли ты выполнил квест. Отметка «Выполнено» — твоя ответственность и честность перед самим собой. Система верит тебе.
-</div>
-
+<div class="warning-box">⚠️ <b>Важно:</b> приложение не может проверить, действительно ли ты выполнил квест. Отметка «Выполнено» — твоя ответственность и честность перед самим собой. Система верит тебе.</div>
 <div class="section-title">Groq API (нейросеть)</div>
 <div class="settings-group">
 <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:8px">
@@ -273,7 +221,6 @@ body.light{background:#d8d8e8}
 </div>
 <div style="font-size:.7rem;color:var(--text-dim);margin-top:8px">Статус: <span id="groqStatus">не задан</span></div>
 </div>
-
 <div class="section-title">Внешний вид</div>
 <div class="settings-group">
 <div class="settings-row">
@@ -281,7 +228,6 @@ body.light{background:#d8d8e8}
 <label class="switch"><input type="checkbox" id="darkModeToggle" checked><span class="slider"></span></label>
 </div>
 </div>
-
 <div class="section-title">Уведомления</div>
 <div class="settings-group">
 <div class="settings-row">
@@ -289,14 +235,12 @@ body.light{background:#d8d8e8}
 <label class="switch"><input type="checkbox" id="notifyToggle"><span class="slider"></span></label>
 </div>
 </div>
-
 <div class="section-title">Данные</div>
 <div class="settings-group">
 <button class="btn btn-secondary" onclick="exportData()" style="margin-bottom:8px">📥 Экспорт прогресса (JSON)</button>
 <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📤 Импорт прогресса</button>
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
 </div>
-
 <div class="section-title">О приложении</div>
 <div class="settings-group" style="font-size:.8rem;line-height:1.6;color:var(--text-dim)">
 <b style="color:var(--primary-glow)">Solo Habit: Стань сильнее</b><br>
@@ -306,7 +250,6 @@ body.light{background:#d8d8e8}
 </div>
 </div>
 
-<!-- ===== BOTTOM NAV ===== -->
 <div class="bottom-nav">
 <button class="nav-btn active" data-tab="home" onclick="switchTab('home')"><span class="nav-icon">🏠</span>Главная</button>
 <button class="nav-btn" data-tab="quests" onclick="switchTab('quests')"><span class="nav-icon">⚔️</span>Квесты</button>
@@ -316,9 +259,6 @@ body.light{background:#d8d8e8}
 </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- ЭКРАН НАГРАДЫ (скрытый) -->
-<!-- ============================================================ -->
 <div class="fullscreen-overlay" id="rewardScreen">
 <img class="gif-bg" id="rewardGif" src="reward.gif" alt="" onerror="this.style.display='none'">
 <div class="overlay-content">
@@ -328,9 +268,6 @@ body.light{background:#d8d8e8}
 </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- ЭКРАН ПРОВАЛА (скрытый) -->
-<!-- ============================================================ -->
 <div class="fullscreen-overlay" id="failScreen">
 <div class="overlay-content">
 <div class="fail-title rank-font">КВЕСТ ПРОВАЛЕН</div>
@@ -339,746 +276,155 @@ body.light{background:#d8d8e8}
 </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ===== JAVASCRIPT (часть 1) ===== -->
 <script>
-// ====================== КОНСТАНТЫ И ДАННЫЕ ======================
 const XP_PER_LEVEL = 100;
 const XP_REWARD_DEFAULT = 10;
 const COIN_REWARD_DEFAULT = 5;
 const PENALTY_XP = 5;
-
-// 🔑 ВСТАВЬТЕ СВОЙ GROQ API КЛЮЧ ЗДЕСЬ (если хотите, чтобы работало сразу у вас)
-// Получить бесплатно: https://console.groq.com/keys
-// Внимание: если ключ вписан сюда, он будет виден в исходном коде страницы!
 const GROQ_API_KEY = ""; 
-
 const RANKS = ['E', 'D', 'C', 'B', 'A', 'S', 'SS', 'SSS'];
 const RANK_REWARDS = {
-    'E':   { xp: 5,  coins: 2 },
-    'D':   { xp: 10, coins: 5 },
-    'C':   { xp: 15, coins: 8 },
-    'B':   { xp: 25, coins: 12 },
-    'A':   { xp: 40, coins: 20 },
-    'S':   { xp: 60, coins: 30 },
-    'SS':  { xp: 90, coins: 50 },
-    'SSS': { xp: 150, coins: 100 }
+    'E': { xp: 5, coins: 2 }, 'D': { xp: 10, coins: 5 }, 'C': { xp: 15, coins: 8 }, 'B': { xp: 25, coins: 12 },
+    'A': { xp: 40, coins: 20 }, 'S': { xp: 60, coins: 30 }, 'SS': { xp: 90, coins: 50 }, 'SSS': { xp: 150, coins: 100 }
 };
+const THEMES = { neon: { name: 'Неон', price: 0 }, dark: { name: 'Тьма', price: 30 }, gold: { name: 'Золото', price: 50 } };
+const AVATARS = { default: { icon: '👤', price: 0 }, hunter: { icon: '🗡️', price: 20 }, shadow: { icon: '🌑', price: 30 }, monarch: { icon: '👑', price: 50 }, dragon: { icon: '🐉', price: 40 } };
+const TITLES = { none: { name: 'Новичок', price: 0 }, hunter: { name: 'Охотник', price: 50 }, monarch: { name: 'Монарх тени', price: 100 }, god: { name: 'Бог разрушения', price: 200 } };
 
-const THEMES = {
-    neon: { name: 'Неон', price: 0, class: 'theme-neon' },
-    dark: { name: 'Тьма', price: 30, class: 'theme-dark' },
-    gold: { name: 'Золото', price: 50, class: 'theme-gold' }
-};
-
-const AVATARS = {
-    default: { icon: '👤', price: 0 },
-    hunter: { icon: '🗡️', price: 20 },
-    shadow: { icon: '🌑', price: 30 },
-    monarch: { icon: '👑', price: 50 },
-    dragon: { icon: '🐉', price: 40 }
-};
-
-const TITLES = {
-    none: { name: 'Новичок', price: 0 },
-    hunter: { name: 'Охотник', price: 50 },
-    monarch: { name: 'Монарх тени', price: 100 },
-    god: { name: 'Бог разрушения', price: 200 }
-};
-
-// ====================== СОСТОЯНИЕ ======================
-let state = {
-    xp: 0,
-    coins: 0,
-    quests: [],
-    currentTheme: 'neon',
-    avatar: 'default',
-    title: 'none',
-    boostUntil: 0,
-    totalQuestsCompleted: 0,
-    totalXPEarned: 0,
-    totalCoinsEarned: 0,
-    bestStreak: 0,
-    lastActiveDate: null,
-    streak: 0,
-    activityLog: {}, // { "YYYY-MM-DD": count }
-    groqKey: ""
-};
-
-// Переменная для конструктора квеста
+let state = { xp: 0, coins: 0, quests: [], currentTheme: 'neon', avatar: 'default', title: 'none', boostUntil: 0, totalQuestsCompleted: 0, totalXPEarned: 0, totalCoinsEarned: 0, bestStreak: 0, lastActiveDate: null, streak: 0, activityLog: {}, groqKey: "" };
 let builderSubpoints = [];
-
-// ====================== LOCALSTORAGE ======================
 const STORAGE_KEY = 'soloHabitTracker_v1';
 
-function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
-}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+function loadState() { const saved = localStorage.getItem(STORAGE_KEY); if (saved) { try { state = { ...state, ...JSON.parse(saved) }; } catch(e) {} } checkDailyReset(); }
 
-function loadState() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-        try { state = { ...state, ...JSON.parse(saved) }; } catch(e) {}
-    }
-    // Проверка ежедневных квестов при загрузке
-    checkDailyReset();
-}
+function showToast(msg, isError = false) { const toast = document.getElementById('toast'); toast.textContent = msg; toast.className = 'toast show' + (isError ? ' error' : ''); setTimeout(() => toast.classList.remove('show'), 3000); }
+function getTodayStr() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function switchTab(tabName) { document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active')); document.getElementById(`tab-${tabName}`).classList.add('active'); document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active'); if(tabName === 'stats') updateStatsUI(); }
 
-// ====================== УТИЛИТЫ ======================
-function showToast(msg, isError = false) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.className = 'toast show' + (isError ? ' error' : '');
-    setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function getTodayStr() {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-    document.getElementById(`tab-${tabName}`).classList.add('active');
-    document.querySelector(`.nav-btn[data-tab="${tabName}"]`).classList.add('active');
-    if(tabName === 'stats') updateStatsUI();
-}
-
-// ====================== ЛОГИКА УРОВНЕЙ И РАНГОВ ======================
 function getCurrentLevel() { return Math.floor(state.xp / XP_PER_LEVEL) + 1; }
-function getRank() {
-    const level = getCurrentLevel();
-    if (level >= 40) return 'SSS';
-    if (level >= 30) return 'SS';
-    if (level >= 20) return 'S';
-    if (level >= 15) return 'A';
-    if (level >= 10) return 'B';
-    if (level >= 5)  return 'C';
-    if (level >= 2)  return 'D';
-    return 'E';
-}
+function getRank() { const level = getCurrentLevel(); if (level >= 40) return 'SSS'; if (level >= 30) return 'SS'; if (level >= 20) return 'S'; if (level >= 15) return 'A'; if (level >= 10) return 'B'; if (level >= 5) return 'C'; if (level >= 2) return 'D'; return 'E'; }
 
-// ====================== UI ГЛАВНОГО ЭКРАНА ======================
 function updateMainUI() {
-    const level = getCurrentLevel();
-    const rank = getRank();
-    const xpInLevel = state.xp % XP_PER_LEVEL;
-    const xpPercent = (xpInLevel / XP_PER_LEVEL) * 100;
-
-    // Уровень и XP
-    document.getElementById('levelDisplay').textContent = level;
-    document.getElementById('xpBarFill').style.width = `${xpPercent}%`;
-    document.getElementById('xpText').textContent = `${xpInLevel} / ${XP_PER_LEVEL} XP`;
-    document.getElementById('xpTotalText').textContent = `${state.xp} XP`;
-    
-    // Монеты
-    document.getElementById('topCoins').textContent = state.coins;
-
-    // Профиль
-    const avatarData = AVATARS[state.avatar] || AVATARS.default;
-    document.getElementById('avatarDisplay').textContent = avatarData.icon;
-    
-    const titleData = TITLES[state.title] || TITLES.none;
-    document.getElementById('profileTitle').textContent = titleData.name;
-
-    const rankBadge = document.getElementById('rankBadge');
-    rankBadge.textContent = rank;
-    rankBadge.className = `rank-badge rank-${rank}`;
-
-    // Активный квест на главной
+    const level = getCurrentLevel(); const rank = getRank(); const xpInLevel = state.xp % XP_PER_LEVEL; const xpPercent = (xpInLevel / XP_PER_LEVEL) * 100;
+    document.getElementById('levelDisplay').textContent = level; document.getElementById('xpBarFill').style.width = `${xpPercent}%`; document.getElementById('xpText').textContent = `${xpInLevel} / ${XP_PER_LEVEL} XP`; document.getElementById('xpTotalText').textContent = `${state.xp} XP`; document.getElementById('topCoins').textContent = state.coins;
+    document.getElementById('avatarDisplay').textContent = (AVATARS[state.avatar] || AVATARS.default).icon; document.getElementById('profileTitle').textContent = (TITLES[state.title] || TITLES.none).name;
+    const rankBadge = document.getElementById('rankBadge'); rankBadge.textContent = rank; rankBadge.className = `rank-badge rank-${rank}`;
     renderActiveQuestHome();
 }
-
 function renderActiveQuestHome() {
-    const container = document.getElementById('homeActiveQuest');
-    const active = state.quests.find(q => q.isActive && !q.completed && !q.failed);
-    
-    if (!active) {
-        container.innerHTML = `<div class="empty-state">Нет активного квеста. Создай его во вкладке «Квесты».</div>`;
-        return;
-    }
-
-    const doneCount = active.subpoints.filter(s => s.done).length;
-    const total = active.subpoints.length;
-    
-    container.innerHTML = `
-        <div class="active-quest">
-            <div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${active.rank} rank-font">${active.rank}</span> RANK</div>
-            <div class="aq-title">${active.name}</div>
-            <div class="aq-progress">Выполнено: ${doneCount} / ${total}</div>
-        </div>
-    `;
+    const container = document.getElementById('homeActiveQuest'); const active = state.quests.find(q => q.isActive && !q.completed && !q.failed);
+    if (!active) { container.innerHTML = `<div class="empty-state">Нет активного квеста. Создай его во вкладке «Квесты».</div>`; return; }
+    const doneCount = active.subpoints.filter(s => s.done).length; const total = active.subpoints.length;
+    container.innerHTML = `<div class="active-quest"><div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${active.rank} rank-font">${active.rank}</span> RANK</div><div class="aq-title">${active.name}</div><div class="aq-progress">Выполнено: ${doneCount} / ${total}</div></div>`;
 }
-
-// ====================== КОНСТРУКТОР КВЕСТОВ ======================
-function addSubpointToBuilder() {
-    const input = document.getElementById('subpointInput');
-    const val = input.value.trim();
-    if (!val) return;
-    
-    builderSubpoints.push(val);
-    input.value = '';
-    renderBuilderSubpoints();
-}
-
-function renderBuilderSubpoints() {
-    const ul = document.getElementById('builderSubpoints');
-    ul.innerHTML = '';
-    builderSubpoints.forEach((sp, idx) => {
-        const li = document.createElement('li');
-        li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:4px;font-size:.85rem';
-        li.innerHTML = `<span>• ${sp}</span> <span style="color:var(--danger);cursor:pointer;font-weight:bold" onclick="removeBuilderSubpoint(${idx})">✕</span>`;
-        ul.appendChild(li);
-    });
-}
-
-function removeBuilderSubpoint(idx) {
-    builderSubpoints.splice(idx, 1);
-    renderBuilderSubpoints();
-}
+function addSubpointToBuilder() { const input = document.getElementById('subpointInput'); const val = input.value.trim(); if (!val) return; builderSubpoints.push(val); input.value = ''; renderBuilderSubpoints(); }
+function renderBuilderSubpoints() { const ul = document.getElementById('builderSubpoints'); ul.innerHTML = ''; builderSubpoints.forEach((sp, idx) => { const li = document.createElement('li'); li.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:4px;font-size:.85rem'; li.innerHTML = `<span>• ${sp}</span> <span style="color:var(--danger);cursor:pointer;font-weight:bold" onclick="removeBuilderSubpoint(${idx})">✕</span>`; ul.appendChild(li); }); }
+function removeBuilderSubpoint(idx) { builderSubpoints.splice(idx, 1); renderBuilderSubpoints(); }
 
 async function createQuest() {
-    const name = document.getElementById('questNameInput').value.trim();
-    if (!name) return showToast('Введите название квеста', true);
-    if (builderSubpoints.length === 0) return showToast('Добавьте хотя бы один подпункт', true);
-
+    const name = document.getElementById('questNameInput').value.trim(); if (!name) return showToast('Введите название квеста', true); if (builderSubpoints.length === 0) return showToast('Добавьте хотя бы один подпункт', true);
     showToast('Система оценивает квест...');
-
-    // Оценка ранга
-    let rank = 'E';
-    if (state.groqKey || GROQ_API_KEY) {
-        rank = await evaluateQuestWithGroq(name, builderSubpoints);
-    } else {
-        rank = evaluateQuestLocal(name, builderSubpoints);
-    }
-
-    const newQuest = {
-        id: Date.now().toString(),
-        name: name,
-        rank: rank,
-        subpoints: builderSubpoints.map(sp => ({ text: sp, done: false })),
-        isActive: state.quests.filter(q => q.isActive).length === 0, // если нет активных, делаем этот активным
-        completed: false,
-        failed: false,
-        isDaily: false
-    };
-
-    state.quests.push(newQuest);
-    
-    // Очистка формы
-    document.getElementById('questNameInput').value = '';
-    builderSubpoints = [];
-    renderBuilderSubpoints();
-
-    saveState();
-    updateUI();
-    showToast(`Квест создан! Ранг: ${rank}`);
+    let rank = 'E'; if (state.groqKey || GROQ_API_KEY) rank = await evaluateQuestWithGroq(name, builderSubpoints); else rank = evaluateQuestLocal(name, builderSubpoints);
+    const newQuest = { id: Date.now().toString(), name, rank, subpoints: builderSubpoints.map(sp => ({ text: sp, done: false })), isActive: state.quests.filter(q => q.isActive).length === 0, completed: false, failed: false, isDaily: false };
+    state.quests.push(newQuest); document.getElementById('questNameInput').value = ''; builderSubpoints = []; renderBuilderSubpoints(); saveState(); updateUI(); showToast(`Квест создан! Ранг: ${rank}`);
 }
-
-// ====================== ОЦЕНКА КВЕСТОВ (ЛОКАЛЬНАЯ) ======================
 function evaluateQuestLocal(name, subpoints) {
-    const text = (name + ' ' + subpoints.join(' ')).toLowerCase();
-    let score = subpoints.length; // базовый скор по количеству
-
-    const highKeywords = ['спортзал', 'тренировка', 'марафон', 'проект', 'экзамен', 'сложный', 'изучить', 'выучить', 'написать', 'пробежка', 'турник', 'отжимания'];
-    const midKeywords = ['убраться', 'помыть', 'посуда', 'урок', 'домашка', 'чтение', 'книга', 'прогулка'];
-    const lowKeywords = ['попить', 'вода', 'полежать', 'поспать', 'отдохнуть', 'перерыв', 'разминка', 'зарядка'];
-
-    highKeywords.forEach(kw => { if (text.includes(kw)) score += 8; });
-    midKeywords.forEach(kw => { if (text.includes(kw)) score += 4; });
-    lowKeywords.forEach(kw => { if (text.includes(kw)) score -= 3; });
-
-    if (score >= 30) return 'SSS';
-    if (score >= 22) return 'SS';
-    if (score >= 16) return 'S';
-    if (score >= 12) return 'A';
-    if (score >= 8)  return 'B';
-    if (score >= 5)  return 'C';
-    if (score >= 2)  return 'D';
-    return 'E';
+    const text = (name + ' ' + subpoints.join(' ')).toLowerCase(); let score = subpoints.length;
+    const high = ['спортзал', 'тренировка', 'марафон', 'проект', 'экзамен', 'сложный', 'изучить', 'выучить', 'написать', 'пробежка', 'турник', 'отжимания'];
+    const mid = ['убраться', 'помыть', 'посуда', 'урок', 'домашка', 'чтение', 'книга', 'прогулка'];
+    const low = ['попить', 'вода', 'полежать', 'поспать', 'отдохнуть', 'перерыв', 'разминка', 'зарядка'];
+    high.forEach(kw => { if (text.includes(kw)) score += 8; }); mid.forEach(kw => { if (text.includes(kw)) score += 4; }); low.forEach(kw => { if (text.includes(kw)) score -= 3; });
+    if (score >= 30) return 'SSS'; if (score >= 22) return 'SS'; if (score >= 16) return 'S'; if (score >= 12) return 'A'; if (score >= 8) return 'B'; if (score >= 5) return 'C'; if (score >= 2) return 'D'; return 'E';
 }
-
-// ====================== ОЦЕНКА КВЕСТОВ (GROQ API) ======================
 async function evaluateQuestWithGroq(name, subpoints) {
     const key = state.groqKey || GROQ_API_KEY;
-    const prompt = `Ты — система рангов из Solo Leveling. Оцени квест по шкале E, D, C, B, A, S, SS, SSS.
-Название: ${name}
-Подпункты: ${subpoints.join(', ')}
-Примеры: "попить воды" = E; "убраться дома" = C; "сходить в спортзал" = S; "марафон" = SS/SSS.
-Верни ТОЛЬКО ОДНУ букву ранга (E, D, C, B, A, S, SS или SSS). Никаких объяснений.`;
-
+    const prompt = `Ты — система рангов из Solo Leveling. Оцени квест по шкале E, D, C, B, A, S, SS, SSS.\nНазвание: ${name}\nПодпункты: ${subpoints.join(', ')}\nПримеры: "попить воды" = E; "убраться дома" = C; "сходить в спортзал" = S; "марафон" = SS/SSS.\nВерни ТОЛЬКО ОДНУ букву ранга (E, D, C, B, A, S, SS или SSS). Никаких объяснений.`;
     try {
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${key}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                model: 'llama3-8b-8192',
-                messages: [{ role: 'user', content: prompt }],
-                temperature: 0.1
-            })
-        });
-
-        if (!response.ok) throw new Error('API Error');
-        const data = await response.json();
-        let result = data.choices[0].message.content.trim().toUpperCase();
-        
-        // Ищем ранг в ответе (на случай если нейросеть написала лишнее)
-        for (let r of [...RANKS].reverse()) {
-            if (result.includes(r)) return r;
-        }
-        return 'C'; // fallback
-    } catch (e) {
-        console.error(e);
-        return evaluateQuestLocal(name, subpoints); // если ошибка, используем алгоритм
-    }
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'llama3-8b-8192', messages: [{ role: 'user', content: prompt }], temperature: 0.1 }) });
+        if (!response.ok) throw new Error('API Error'); const data = await response.json(); let result = data.choices[0].message.content.trim().toUpperCase();
+        for (let r of [...RANKS].reverse()) { if (result.includes(r)) return r; } return 'C';
+    } catch (e) { console.error(e); return evaluateQuestLocal(name, subpoints); }
 }
+function updateUI() { updateMainUI(); renderQuests(); renderShop(); saveState(); }
 
-// ====================== ОБНОВЛЕНИЕ ВСЕГО UI ======================
-function updateUI() {
-    updateMainUI();
-    renderQuests();
-    renderShop();
-    saveState();
-}
-
-// ЗАГЛУШКИ ДЛЯ СЛЕДУЮЩЕЙ ЧАСТИ (они будут перезаписаны)
-function renderQuests() {}
-function renderShop() {}
-function updateStatsUI() {}
-function checkDailyReset() {}
-function saveGroqKey() {}
-function clearGroqKey() {}
-function exportData() {}
-function importData() {}
-function closeOverlay() {}
-
-// ИНИЦИАЛИЗАЦИЯ
-window.onload = () => {
-    loadState();
-    
-    // Заполняем поле ключа, если он есть
-    const keyInput = document.getElementById('groqKeyInput');
-    if (keyInput && state.groqKey) {
-        keyInput.value = state.groqKey;
-        document.getElementById('groqStatus').textContent = 'ключ задан ✓';
-        document.getElementById('groqStatus').style.color = 'var(--success)';
-    }
-    
-    updateUI();
-};
-// ====================== ОТРИСОВКА КВЕСТОВ ======================
 function renderQuests() {
-    const activeContainer = document.getElementById('activeQuestSection');
-    const allContainer = document.getElementById('allQuestsList');
-    
-    const activeQuests = state.quests.filter(q => q.isActive && !q.completed && !q.failed);
-    const otherQuests = state.quests.filter(q => !q.isActive || q.completed || q.failed);
-
-    // Рендер активного квеста
-    if (activeQuests.length === 0) {
-        activeContainer.innerHTML = `<div class="empty-state">Нет активного квеста</div>`;
-    } else {
-        activeContainer.innerHTML = '';
-        activeQuests.forEach(q => {
-            const div = document.createElement('div');
-            div.className = 'active-quest';
-            
-            const doneCount = q.subpoints.filter(s => s.done).length;
-            const total = q.subpoints.length;
-            const percent = total > 0 ? (doneCount / total) * 100 : 0;
-
-            div.innerHTML = `
-                <div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${q.rank} rank-font">${q.rank}</span> RANK</div>
-                <div class="aq-title">${q.name}</div>
-                <div class="aq-progress">Выполнено: ${doneCount} из ${total} (${Math.round(percent)}%)</div>
-                <div class="subprogress-bar"><div class="subprogress-fill" style="width:${percent}%"></div></div>
-                <ul class="subpoints">
-                    ${q.subpoints.map((sp, idx) => `
-                        <li>
-                            <input type="checkbox" id="sp-${q.id}-${idx}" ${sp.done ? 'checked' : ''} onchange="toggleSubpoint('${q.id}', ${idx})">
-                            <label for="sp-${q.id}-${idx}">${sp.text}</label>
-                        </li>
-                    `).join('')}
-                </ul>
-                <div class="quest-actions">
-                    <button class="btn btn-primary" onclick="completeQuest('${q.id}')">Завершить квест</button>
-                </div>
-            `;
+    const activeContainer = document.getElementById('activeQuestSection'); const allContainer = document.getElementById('allQuestsList');
+    const activeQuests = state.quests.filter(q => q.isActive && !q.completed && !q.failed); const otherQuests = state.quests.filter(q => !q.isActive || q.completed || q.failed);
+    if (activeQuests.length === 0) { activeContainer.innerHTML = `<div class="empty-state">Нет активного квеста</div>`; } else {
+        activeContainer.innerHTML = ''; activeQuests.forEach(q => {
+            const div = document.createElement('div'); div.className = 'active-quest'; const doneCount = q.subpoints.filter(s => s.done).length; const total = q.subpoints.length; const percent = total > 0 ? (doneCount / total) * 100 : 0;
+            div.innerHTML = `<div class="aq-label">АКТИВНЫЙ КВЕСТ — <span class="rank-${q.rank} rank-font">${q.rank}</span> RANK</div><div class="aq-title">${q.name}</div><div class="aq-progress">Выполнено: ${doneCount} из ${total} (${Math.round(percent)}%)</div><div class="subprogress-bar"><div class="subprogress-fill" style="width:${percent}%"></div></div><ul class="subpoints">${q.subpoints.map((sp, idx) => `<li><input type="checkbox" id="sp-${q.id}-${idx}" ${sp.done ? 'checked' : ''} onchange="toggleSubpoint('${q.id}', ${idx})"><label for="sp-${q.id}-${idx}">${sp.text}</label></li>`).join('')}</ul><div class="quest-actions"><button class="btn btn-primary" onclick="completeQuest('${q.id}')">Завершить квест</button></div>`;
             activeContainer.appendChild(div);
         });
     }
-
-    // Рендер остальных квестов
-    if (otherQuests.length === 0) {
-        allContainer.innerHTML = `<div class="empty-state">Пока нет других квестов</div>`;
-    } else {
-        allContainer.innerHTML = '';
-        otherQuests.forEach(q => {
-            const div = document.createElement('div');
-            div.className = 'quest-item';
-            if (q.completed || q.failed) div.style.opacity = '0.5';
-            
-            let statusText = '';
-            if (q.completed) statusText = ' (Выполнен)';
-            if (q.failed) statusText = ' (Провален)';
-            
-            let actionBtn = '';
-            if (!q.completed && !q.failed) {
-                actionBtn = `<button class="btn btn-secondary btn-small" onclick="setActiveQuest('${q.id}')">Сделать активным</button>`;
-            }
-
-            div.innerHTML = `
-                <div class="quest-header">
-                    <div class="quest-name">${q.name}${statusText}</div>
-                    <span class="quest-rank-badge rank-${q.rank} rank-font">${q.rank}</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-                    <div style="font-size:.75rem;color:var(--text-dim)">Подпунктов: ${q.subpoints.length}</div>
-                    ${actionBtn}
-                </div>
-            `;
+    if (otherQuests.length === 0) { allContainer.innerHTML = `<div class="empty-state">Пока нет других квестов</div>`; } else {
+        allContainer.innerHTML = ''; otherQuests.forEach(q => {
+            const div = document.createElement('div'); div.className = 'quest-item'; if (q.completed || q.failed) div.style.opacity = '0.5';
+            let statusText = ''; if (q.completed) statusText = ' (Выполнен)'; if (q.failed) statusText = ' (Провален)';
+            let actionBtn = ''; if (!q.completed && !q.failed) actionBtn = `<button class="btn btn-secondary btn-small" onclick="setActiveQuest('${q.id}')">Сделать активным</button>`;
+            div.innerHTML = `<div class="quest-header"><div class="quest-name">${q.name}${statusText}</div><span class="quest-rank-badge rank-${q.rank} rank-font">${q.rank}</span></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><div style="font-size:.75rem;color:var(--text-dim)">Подпунктов: ${q.subpoints.length}</div>${actionBtn}</div>`;
             allContainer.appendChild(div);
         });
     }
 }
-
-function setActiveQuest(id) {
-    state.quests.forEach(q => {
-        if (!q.completed && !q.failed) q.isActive = (q.id === id);
-    });
-    saveState();
-    updateUI();
-}
-
-function toggleSubpoint(questId, spIndex) {
-    const quest = state.quests.find(q => q.id === questId);
-    if (!quest) return;
-    quest.subpoints[spIndex].done = !quest.subpoints[spIndex].done;
-    saveState();
-    updateUI();
-}
+function setActiveQuest(id) { state.quests.forEach(q => { if (!q.completed && !q.failed) q.isActive = (q.id === id); }); saveState(); updateUI(); }
+function toggleSubpoint(questId, spIndex) { const quest = state.quests.find(q => q.id === questId); if (!quest) return; quest.subpoints[spIndex].done = !quest.subpoints[spIndex].done; saveState(); updateUI(); }
 
 function completeQuest(id) {
-    const quest = state.quests.find(q => q.id === id);
-    if (!quest) return;
-
-    const doneCount = quest.subpoints.filter(s => s.done).length;
-    const total = quest.subpoints.length;
-    const percent = total > 0 ? (doneCount / total) * 100 : 0;
-
+    const quest = state.quests.find(q => q.id === id); if (!quest) return;
+    const doneCount = quest.subpoints.filter(s => s.done).length; const total = quest.subpoints.length; const percent = total > 0 ? (doneCount / total) * 100 : 0;
     if (percent >= 85) {
-        // УСПЕХ
-        let baseReward = RANK_REWARDS[quest.rank] || RANK_REWARDS['E'];
-        let xpGain = baseReward.xp;
-        let coinGain = baseReward.coins;
-
-        // Буст x2
-        if (state.boostUntil > Date.now()) {
-            xpGain *= 2;
-            coinGain *= 2;
-        }
-
-        state.xp += xpGain;
-        state.coins += coinGain;
-        state.totalQuestsCompleted++;
-        state.totalXPEarned += xpGain;
-        state.totalCoinsEarned += coinGain;
-
-        // Логирование активности
-        const today = getTodayStr();
-        state.activityLog[today] = (state.activityLog[today] || 0) + 1;
-
-        // Серия дней
+        let baseReward = RANK_REWARDS[quest.rank] || RANK_REWARDS['E']; let xpGain = baseReward.xp; let coinGain = baseReward.coins;
+        if (state.boostUntil > Date.now()) { xpGain *= 2; coinGain *= 2; }
+        state.xp += xpGain; state.coins += coinGain; state.totalQuestsCompleted++; state.totalXPEarned += xpGain; state.totalCoinsEarned += coinGain;
+        const today = getTodayStr(); state.activityLog[today] = (state.activityLog[today] || 0) + 1;
         if (state.lastActiveDate !== today) {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-            
-            if (state.lastActiveDate === yStr) state.streak++;
-            else state.streak = 1;
-            
-            if (state.streak > state.bestStreak) state.bestStreak = state.streak;
-            state.lastActiveDate = today;
+            const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1); const yStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+            if (state.lastActiveDate === yStr) state.streak++; else state.streak = 1;
+            if (state.streak > state.bestStreak) state.bestStreak = state.streak; state.lastActiveDate = today;
         }
-
-        // Помечаем квест выполненным
-        quest.completed = true;
-        quest.isActive = false;
-        
-        // Ищем следующий невыполненный квест
-        const nextQuest = state.quests.find(q => !q.completed && !q.failed);
-        if (nextQuest) nextQuest.isActive = true;
-
-        saveState();
-        updateUI();
-        
-        // Показываем экран награды
-        showRewardScreen(quest.rank, xpGain, coinGain);
-        
+        quest.completed = true; quest.isActive = false;
+        const nextQuest = state.quests.find(q => !q.completed && !q.failed); if (nextQuest) nextQuest.isActive = true;
+        saveState(); updateUI(); showRewardScreen(quest.rank, xpGain, coinGain);
     } else {
-        // ПРОВАЛ
-        let xpLoss = PENALTY_XP;
-        state.xp = Math.max(0, state.xp - xpLoss); // не ниже 0
-        quest.failed = true;
-        quest.isActive = false;
-        
-        // Сбрасываем серию
-        state.streak = 0;
-
-        // Ищем следующий невыполненный
-        const nextQuest = state.quests.find(q => !q.completed && !q.failed);
-        if (nextQuest) nextQuest.isActive = true;
-
-        saveState();
-        updateUI();
-        
-        // Показываем экран провала
-        showFailScreen(xpLoss);
+        let xpLoss = PENALTY_XP; state.xp = Math.max(0, state.xp - xpLoss); quest.failed = true; quest.isActive = false; state.streak = 0;
+        const nextQuest = state.quests.find(q => !q.completed && !q.failed); if (nextQuest) nextQuest.isActive = true;
+        saveState(); updateUI(); showFailScreen(xpLoss);
     }
 }
+function showRewardScreen(rank, xp, coins) { const title = document.getElementById('rewardTitle'); title.textContent = `КВЕСТ ${rank} RANK ВЫПОЛНЕН`; title.className = `reward-title rank-font rank-${rank}`; document.getElementById('rewardStats').textContent = `+${xp} XP · +${coins} 🪙`; document.getElementById('rewardScreen').classList.add('show'); if (navigator.vibrate) navigator.vibrate([100, 50, 100]); }
+function showFailScreen(xpLoss) { document.getElementById('failStats').textContent = `−${xpLoss} XP · Прогресс сброшен`; document.getElementById('failScreen').classList.add('show'); if (navigator.vibrate) navigator.vibrate(300); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('show'); switchTab('home'); }
 
-// ====================== ЭКРАНЫ НАГРАДЫ И ПРОВАЛА ======================
-function showRewardScreen(rank, xp, coins) {
-    const title = document.getElementById('rewardTitle');
-    title.textContent = `КВЕСТ ${rank} RANK ВЫПОЛНЕН`;
-    title.className = `reward-title rank-font rank-${rank}`;
-    
-    document.getElementById('rewardStats').textContent = `+${xp} XP · +${coins} 🪙`;
-    document.getElementById('rewardScreen').classList.add('show');
-    
-    // Звук и вибрация
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-}
-
-function showFailScreen(xpLoss) {
-    document.getElementById('failStats').textContent = `−${xpLoss} XP · Прогресс сброшен`;
-    document.getElementById('failScreen').classList.add('show');
-    if (navigator.vibrate) navigator.vibrate(300);
-}
-
-function closeOverlay(id) {
-    document.getElementById(id).classList.remove('show');
-    switchTab('home');
-}
-
-// ====================== МАГАЗИН ======================
 function renderShop() {
-    // Темы
-    const themesGrid = document.getElementById('themesGrid');
-    themesGrid.innerHTML = Object.keys(THEMES).map(key => {
-        const t = THEMES[key];
-        const isOwned = (state.currentTheme === key);
-        return `
-            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTheme('${key}')">
-                <div class="si-icon">🎨</div>
-                <div class="si-name">${t.name}</div>
-                <div class="si-price">${isOwned ? 'Активна' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div>
-            </div>
-        `;
-    }).join('');
-
-    // Аватары
-    const avatarsGrid = document.getElementById('avatarsGrid');
-    avatarsGrid.innerHTML = Object.keys(AVATARS).map(key => {
-        const a = AVATARS[key];
-        const isOwned = (state.avatar === key);
-        return `
-            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyAvatar('${key}')">
-                <div class="si-icon">${a.icon}</div>
-                <div class="si-price">${isOwned ? 'Выбран' : (a.price === 0 ? 'Бесплатно' : a.price + ' 🪙')}</div>
-            </div>
-        `;
-    }).join('');
-
-    // Титулы
-    const titlesGrid = document.getElementById('titlesGrid');
-    titlesGrid.innerHTML = Object.keys(TITLES).map(key => {
-        const t = TITLES[key];
-        const isOwned = (state.title === key);
-        return `
-            <div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTitle('${key}')">
-                <div class="si-icon">📜</div>
-                <div class="si-name" style="font-size:.75rem">${t.name}</div>
-                <div class="si-price">${isOwned ? 'Выбран' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div>
-            </div>
-        `;
-    }).join('');
-
-    // Бусты
-    const boostsGrid = document.getElementById('boostsGrid');
+    document.getElementById('themesGrid').innerHTML = Object.keys(THEMES).map(key => { const t = THEMES[key]; const isOwned = (state.currentTheme === key); return `<div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTheme('${key}')"><div class="si-icon">🎨</div><div class="si-name">${t.name}</div><div class="si-price">${isOwned ? 'Активна' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div></div>`; }).join('');
+    document.getElementById('avatarsGrid').innerHTML = Object.keys(AVATARS).map(key => { const a = AVATARS[key]; const isOwned = (state.avatar === key); return `<div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyAvatar('${key}')"><div class="si-icon">${a.icon}</div><div class="si-price">${isOwned ? 'Выбран' : (a.price === 0 ? 'Бесплатно' : a.price + ' 🪙')}</div></div>`; }).join('');
+    document.getElementById('titlesGrid').innerHTML = Object.keys(TITLES).map(key => { const t = TITLES[key]; const isOwned = (state.title === key); return `<div class="shop-item ${isOwned ? 'active-theme' : ''}" onclick="buyTitle('${key}')"><div class="si-icon">📜</div><div class="si-name" style="font-size:.75rem">${t.name}</div><div class="si-price">${isOwned ? 'Выбран' : (t.price === 0 ? 'Бесплатно' : t.price + ' 🪙')}</div></div>`; }).join('');
     const boostActive = state.boostUntil > Date.now();
-    boostsGrid.innerHTML = `
-        <div class="shop-item" onclick="buyBoost()">
-            <div class="si-icon">⚡</div>
-            <div class="si-name">x2 XP на 1 час</div>
-            <div class="si-price">${boostActive ? 'Активен' : '40 🪙'}</div>
-        </div>
-    `;
+    document.getElementById('boostsGrid').innerHTML = `<div class="shop-item" onclick="buyBoost()"><div class="si-icon">⚡</div><div class="si-name">x2 XP на 1 час</div><div class="si-price">${boostActive ? 'Активен' : '40 🪙'}</div></div>`;
 }
+function buyTheme(key) { const t = THEMES[key]; if (state.currentTheme === key) return; if (state.coins < t.price) return showToast('Недостаточно монет!', true); state.coins -= t.price; state.currentTheme = key; saveState(); updateUI(); showToast('Тема изменена!'); }
+function buyAvatar(key) { const a = AVATARS[key]; if (state.avatar === key) return; if (state.coins < a.price) return showToast('Недостаточно монет!', true); state.coins -= a.price; state.avatar = key; saveState(); updateUI(); showToast('Аватар куплен!'); }
+function buyTitle(key) { const t = TITLES[key]; if (state.title === key) return; if (state.coins < t.price) return showToast('Недостаточно монет!', true); state.coins -= t.price; state.title = key; saveState(); updateUI(); showToast('Титул куплен!'); }
+function buyBoost() { if (state.boostUntil > Date.now()) return showToast('Буст уже активен', true); if (state.coins < 40) return showToast('Недостаточно монет!', true); state.coins -= 40; state.boostUntil = Date.now() + (60 * 60 * 1000); saveState(); updateUI(); showToast('Буст x2 XP активирован на 1 час!'); }
 
-function buyTheme(key) {
-    const t = THEMES[key];
-    if (state.currentTheme === key) return;
-    if (state.coins < t.price) return showToast('Недостаточно монет!', true);
-    
-    state.coins -= t.price;
-    state.currentTheme = key;
-    saveState();
-    updateUI();
-    showToast('Тема изменена!');
-}
-
-function buyAvatar(key) {
-    const a = AVATARS[key];
-    if (state.avatar === key) return;
-    if (state.coins < a.price) return showToast('Недостаточно монет!', true);
-    
-    state.coins -= a.price;
-    state.avatar = key;
-    saveState();
-    updateUI();
-    showToast('Аватар куплен!');
-}
-
-function buyTitle(key) {
-    const t = TITLES[key];
-    if (state.title === key) return;
-    if (state.coins < t.price) return showToast('Недостаточно монет!', true);
-    
-    state.coins -= t.price;
-    state.title = key;
-    saveState();
-    updateUI();
-    showToast('Титул куплен!');
-}
-
-function buyBoost() {
-    if (state.boostUntil > Date.now()) return showToast('Буст уже активен', true);
-    if (state.coins < 40) return showToast('Недостаточно монет!', true);
-    
-    state.coins -= 40;
-    state.boostUntil = Date.now() + (60 * 60 * 1000); // 1 час
-    saveState();
-    updateUI();
-    showToast('Буст x2 XP активирован на 1 час!');
-}
-
-// ====================== СТАТИСТИКА ======================
 function updateStatsUI() {
-    document.getElementById('statTotalQuests').textContent = state.totalQuestsCompleted;
-    document.getElementById('statTotalXP').textContent = state.totalXPEarned;
-    document.getElementById('statTotalCoins').textContent = state.totalCoinsEarned;
-    document.getElementById('statStreak').textContent = state.bestStreak;
-
-    const chartBars = document.getElementById('chartBars');
-    chartBars.innerHTML = '';
-    
-    const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-    const now = new Date();
-    
-    let maxVal = 1;
-    let last7Days = [];
-
-    for (let i = 6; i >= 0; i--) {
-        const d = new Date(now);
-        d.setDate(d.getDate() - i);
-        const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        const val = state.activityLog[dateStr] || 0;
-        if (val > maxVal) maxVal = val;
-        last7Days.push({ day: days[d.getDay()], val: val });
-    }
-
-    last7Days.forEach(d => {
-        const heightPercent = (d.val / maxVal) * 100;
-        const barWrap = document.createElement('div');
-        barWrap.className = 'chart-bar-wrap';
-        barWrap.innerHTML = `
-            <div class="chart-val">${d.val > 0 ? d.val : ''}</div>
-            <div class="chart-bar" style="height:${heightPercent}%"></div>
-            <div class="chart-day">${d.day}</div>
-        `;
-        chartBars.appendChild(barWrap);
-    });
+    document.getElementById('statTotalQuests').textContent = state.totalQuestsCompleted; document.getElementById('statTotalXP').textContent = state.totalXPEarned; document.getElementById('statTotalCoins').textContent = state.totalCoinsEarned; document.getElementById('statStreak').textContent = state.bestStreak;
+    const chartBars = document.getElementById('chartBars'); chartBars.innerHTML = ''; const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']; const now = new Date(); let maxVal = 1; let last7Days = [];
+    for (let i = 6; i >= 0; i--) { const d = new Date(now); d.setDate(d.getDate() - i); const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; const val = state.activityLog[dateStr] || 0; if (val > maxVal) maxVal = val; last7Days.push({ day: days[d.getDay()], val: val }); }
+    last7Days.forEach(d => { const heightPercent = (d.val / maxVal) * 100; const barWrap = document.createElement('div'); barWrap.className = 'chart-bar-wrap'; barWrap.innerHTML = `<div class="chart-val">${d.val > 0 ? d.val : ''}</div><div class="chart-bar" style="height:${heightPercent}%"></div><div class="chart-day">${d.day}</div>`; chartBars.appendChild(barWrap); });
 }
+function saveGroqKey() { const val = document.getElementById('groqKeyInput').value.trim(); if (!val) return showToast('Введите ключ', true); state.groqKey = val; saveState(); document.getElementById('groqStatus').textContent = 'ключ задан ✓'; document.getElementById('groqStatus').style.color = 'var(--success)'; showToast('Ключ сохранен!'); }
+function clearGroqKey() { state.groqKey = ''; saveState(); document.getElementById('groqKeyInput').value = ''; document.getElementById('groqStatus').textContent = 'не задан'; document.getElementById('groqStatus').style.color = 'var(--text-dim)'; showToast('Ключ удален'); }
+document.getElementById('darkModeToggle').addEventListener('change', (e) => { if (e.target.checked) document.body.classList.remove('light'); else document.body.classList.add('light'); });
+function exportData() { const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state)); const downloadAnchorNode = document.createElement('a'); downloadAnchorNode.setAttribute("href", dataStr); downloadAnchorNode.setAttribute("download", "solo_habit_backup.json"); document.body.appendChild(downloadAnchorNode); downloadAnchorNode.click(); downloadAnchorNode.remove(); }
+function importData(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const imported = JSON.parse(e.target.result); if (imported.quests && imported.xp !== undefined) { state = { ...state, ...imported }; saveState(); updateUI(); showToast('Прогресс успешно импортирован!'); } else { showToast('Неверный файл', true); } } catch (err) { showToast('Ошибка чтения файла', true); } }; reader.readAsText(file); }
+function checkDailyReset() { const today = getTodayStr(); state.quests.forEach(q => { if (q.isDaily && q.completed && q.lastCompletedDate !== today) { q.completed = false; q.subpoints.forEach(sp => sp.done = false); q.lastCompletedDate = today; } }); }
 
-// ====================== НАСТРОЙКИ И GROQ ======================
-function saveGroqKey() {
-    const val = document.getElementById('groqKeyInput').value.trim();
-    if (!val) return showToast('Введите ключ', true);
-    state.groqKey = val;
-    saveState();
-    document.getElementById('groqStatus').textContent = 'ключ задан ✓';
-    document.getElementById('groqStatus').style.color = 'var(--success)';
-    showToast('Ключ сохранен!');
-}
-
-function clearGroqKey() {
-    state.groqKey = '';
-    saveState();
-    document.getElementById('groqKeyInput').value = '';
-    document.getElementById('groqStatus').textContent = 'не задан';
-    document.getElementById('groqStatus').style.color = 'var(--text-dim)';
-    showToast('Ключ удален');
-}
-
-// Переключение темы (тёмная/светлая)
-document.getElementById('darkModeToggle').addEventListener('change', (e) => {
-    if (e.target.checked) document.body.classList.remove('light');
-    else document.body.classList.add('light');
-});
-
-// Экспорт / Импорт
-function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-    const downloadAnchorNode = document.createElement('a');
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", "solo_habit_backup.json");
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-}
-
-function importData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const imported = JSON.parse(e.target.result);
-            if (imported.quests && imported.xp !== undefined) {
-                state = { ...state, ...imported };
-                saveState();
-                updateUI();
-                showToast('Прогресс успешно импортирован!');
-            } else {
-                showToast('Неверный файл', true);
-            }
-        } catch (err) {
-            showToast('Ошибка чтения файла', true);
-        }
-    };
-    reader.readAsText(file);
-}
-
-// Проверка ежедневного сброса
-function checkDailyReset() {
-    const today = getTodayStr();
-    state.quests.forEach(q => {
-        if (q.isDaily && q.completed && q.lastCompletedDate !== today) {
-            q.completed = false;
-            q.subpoints.forEach(sp => sp.done = false);
-            q.lastCompletedDate = today;
-        }
-    });
-}
-
-// Устанавливаем сегодняшнюю дату для новых ежедневных квестов (заглушка)
+window.onload = () => { loadState(); const keyInput = document.getElementById('groqKeyInput'); if (keyInput && state.groqKey) { keyInput.value = state.groqKey; document.getElementById('groqStatus').textContent = 'ключ задан ✓'; document.getElementById('groqStatus').style.color = 'var(--success)'; } updateUI(); };
 </script>
 </body>
 </html>
